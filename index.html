@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Registry DApp</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .section {
+        border: 1px solid #ddd;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      input,
+      button {
+        padding: 8px;
+        margin-bottom: 10px;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      .error {
+        color: red;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Student Registry DApp</h1>
+
+    <div class="section">
+      <h2>Student Registration</h2>
+      <div class="form-group">
+        <label for="studentName">Name:</label>
+        <input type="text" id="studentName" required />
+      </div>
+      <div class="form-group">
+        <label for="studentId">Student ID:</label>
+        <input type="number" id="studentId" required />
+      </div>
+      <div class="form-group">
+        <label for="yearOfStudy">Year of Study (1-4):</label>
+        <input type="number" id="yearOfStudy" min="1" max="4" required />
+      </div>
+      <button onclick="registerStudent()">Register Student</button>
+    </div>
+
+    <div class="section">
+      <h2>Share CV</h2>
+      <div class="form-group">
+        <label for="ipfsHash">IPFS Hash:</label>
+        <input type="text" id="ipfsHash" required />
+      </div>
+      <div class="form-group">
+        <label for="isPublic">
+          <input type="checkbox" id="isPublic" />
+          Make CV Public
+        </label>
+      </div>
+      <button onclick="shareCV()">Share CV</button>
+    </div>
+
+    <div class="section">
+      <h2>Share Interview Experience</h2>
+      <div class="form-group">
+        <label for="companyName">Company Name:</label>
+        <input type="text" id="companyName" required />
+      </div>
+      <div class="form-group">
+        <label for="position">Position:</label>
+        <input type="text" id="position" required />
+      </div>
+      <div class="form-group">
+        <label for="questions">Interview Questions (comma-separated):</label>
+        <input
+          type="text"
+          id="questions"
+          placeholder="What is X?, How do you Y?"
+          required
+        />
+      </div>
+      <button onclick="shareInterview()">Share Interview</button>
+    </div>
+
+    <script>
+      let web3;
+      let studentRegistry;
+      let cvShare;
+      let interviewShare;
+      let currentAccount;
+
+      const studentRegistryAddress = "YOUR_STUDENT_REGISTRY_CONTRACT_ADDRESS";
+      const cvShareAddress = "YOUR_CV_SHARE_CONTRACT_ADDRESS";
+      const interviewShareAddress = "YOUR_INTERVIEW_SHARE_CONTRACT_ADDRESS";
+
+      async function init() {
+        try {
+          const provider = await detectEthereumProvider();
+          if (provider) {
+            web3 = new Web3(provider);
+            await provider.request({ method: "eth_requestAccounts" });
+            const accounts = await web3.eth.getAccounts();
+            currentAccount = accounts[0];
+
+            // Initialize contracts (you'll need to add your ABIs)
+            studentRegistry = new web3.eth.Contract(
+              StudentRegistryABI,
+              studentRegistryAddress
+            );
+            cvShare = new web3.eth.Contract(CVShareABI, cvShareAddress);
+            interviewShare = new web3.eth.Contract(
+              InterviewShareABI,
+              interviewShareAddress
+            );
+          } else {
+            alert("Please install MetaMask!");
+          }
+        } catch (error) {
+          console.error("Error initializing Web3:", error);
+        }
+      }
+
+      async function registerStudent() {
+        try {
+          const name = document.getElementById("studentName").value;
+          const id = document.getElementById("studentId").value;
+          const year = document.getElementById("yearOfStudy").value;
+
+          await studentRegistry.methods
+            .registerStudent(name, id, year)
+            .send({ from: currentAccount });
+          alert("Student registered successfully!");
+        } catch (error) {
+          alert("Error registering student: " + error.message);
+        }
+      }
+
+      async function shareCV() {
+        try {
+          const ipfsHash = document.getElementById("ipfsHash").value;
+          const isPublic = document.getElementById("isPublic").checked;
+
+          await cvShare.methods
+            .shareCV(ipfsHash, isPublic)
+            .send({ from: currentAccount });
+          alert("CV shared successfully!");
+        } catch (error) {
+          alert("Error sharing CV: " + error.message);
+        }
+      }
+
+      async function shareInterview() {
+        try {
+          const companyName = document.getElementById("companyName").value;
+          const position = document.getElementById("position").value;
+          const questions = document
+            .getElementById("questions")
+            .value.split(",")
+            .map((q) => q.trim());
+
+          await interviewShare.methods
+            .shareInterview(companyName, questions, position)
+            .send({ from: currentAccount });
+          alert("Interview experience shared successfully!");
+        } catch (error) {
+          alert("Error sharing interview: " + error.message);
+        }
+      }
+
+      window.addEventListener("load", init);
+    </script>
+  </body>
+</html>
