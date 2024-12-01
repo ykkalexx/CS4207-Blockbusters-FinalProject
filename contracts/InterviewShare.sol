@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.21;
 
-import "./StudentRegistry.sol";
+import "./IStudentRegistry.sol";
 
 contract InterviewShare {
-    StudentRegistry public studentRegistry;
+    IStudentRegistry public studentRegistry;
     
     struct Interview {
         string companyName;
@@ -24,7 +25,7 @@ contract InterviewShare {
     }
     
     constructor(address _studentRegistry) {
-        studentRegistry = StudentRegistry(_studentRegistry);
+        studentRegistry = IStudentRegistry(_studentRegistry);
     }
     
     function shareInterview(
