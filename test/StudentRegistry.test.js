@@ -26,10 +26,9 @@ describe("StudentRegistry Contract", () => {
       );
 
       const student = await studentRegistry.getStudentInfo(accounts[0]);
-
-      expect(student[0]).toBe(studentName); // name
-      expect(student[1].toNumber()).toBe(studentId); // studentId
-      expect(student[2].toNumber()).toBe(yearOfStudy); // yearOfStudy
+      expect(student[0]).toBe(studentName);
+      expect(student[1].toNumber()).toBe(studentId);
+      expect(student[2].toNumber()).toBe(yearOfStudy);
     });
 
     it("should not allow duplicate registration", async () => {
@@ -44,6 +43,17 @@ describe("StudentRegistry Contract", () => {
         fail("Should have thrown an error");
       } catch (error) {
         expect(error.message).toContain("Student already registered");
+      }
+    });
+
+    it("should not allow invalid year of study", async () => {
+      try {
+        await studentRegistry.registerStudent("John Doe", 12345, 5, {
+          from: accounts[0],
+        });
+        fail("Should have thrown an error");
+      } catch (error) {
+        expect(error.message).toContain("Invalid year of study");
       }
     });
   });
