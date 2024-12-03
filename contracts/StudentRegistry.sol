@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.21;
+pragma solidity ^0.8.19;
 
 contract StudentRegistry {
     struct Student {
@@ -13,11 +13,12 @@ contract StudentRegistry {
     mapping(address => Student) public students;
     mapping(uint256 => address) public studentIdToAddress;
     uint256 public totalStudents;
-    address public owner;
+    address public immutable owner;
     
     event StudentRegistered(address indexed studentAddress, uint256 studentId, string name);
     
-    constructor() {
+    constructor() payable {
+        require(msg.sender != address(0), "Invalid deployer address");
         owner = msg.sender;
         totalStudents = 0;
     }
@@ -32,30 +33,13 @@ contract StudentRegistry {
         _;
     }
 
-    // Add this function
-    function getStudentInfo(address _studentAddress) 
-        public 
-        view 
-        returns (
-            string memory name,
-            uint256 studentId,
-            uint256 yearOfStudy
-        ) 
-    {
+    function getStudentInfo(address _studentAddress) public view returns (string memory name, uint256 studentId, uint256 yearOfStudy) {
         Student memory student = students[_studentAddress];
         require(student.isRegistered, "Student not found");
-        return (
-            student.name,
-            student.studentId,
-            student.yearOfStudy
-        );
+        return (student.name, student.studentId, student.yearOfStudy);
     }
     
-    function registerStudent(
-        string memory _name,
-        uint256 _studentId,
-        uint256 _yearOfStudy
-    ) public notRegistered {
+    function registerStudent(string memory _name, uint256 _studentId, uint256 _yearOfStudy) public notRegistered {
         require(bytes(_name).length > 0, "Name cannot be empty");
         require(_yearOfStudy > 0 && _yearOfStudy <= 4, "Invalid year of study");
         require(_studentId > 0, "Invalid student ID");

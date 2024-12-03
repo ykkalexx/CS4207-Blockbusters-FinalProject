@@ -2,16 +2,20 @@ module.exports = {
   networks: {
     development: {
       host: "127.0.0.1",
-      port: 7545, // Ganache GUI default port
-      network_id: "5777", // Ganache GUI default network id
-      gas: 6721975, // Gas limit
-      from: undefined, // Let Truffle use the first available account
+      port: 7545,
+      network_id: 5777,
+      websockets: true,
+      timeoutBlocks: 200,
+      networkCheckTimeout: 100000,
+      gas: 9000000,
+      gasPrice: 20000000000,
     },
   },
   compilers: {
     solc: {
-      version: "0.8.21",
+      version: "0.8.19",
       settings: {
+        viaIR: true,
         optimizer: {
           enabled: true,
           runs: 200,

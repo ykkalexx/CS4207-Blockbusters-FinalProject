@@ -31,7 +31,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.21+commit.d9974bed\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_studentAddress\",\"type\":\"address\"}],\"name\":\"getStudentInfo\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"studentId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"yearOfStudy\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IStudentRegistry.sol\":\"IStudentRegistry\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/IStudentRegistry.sol\":{\"keccak256\":\"0x60c25fbea368fb4ad914927a9415ca8d373cc191090991a2f1f33fd78e6f0947\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://49cd904d022a35bf42e60766757934d69b1efc26807b99d0909b173078705646\",\"dweb:/ipfs/QmUtbQTCQNJqxfVceLv3KsDpKSMGPJ5d5YMr8hhduGTrN3\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_studentAddress\",\"type\":\"address\"}],\"name\":\"getStudentInfo\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"studentId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"yearOfStudy\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IStudentRegistry.sol\":\"IStudentRegistry\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[],\"viaIR\":true},\"sources\":{\"project:/contracts/IStudentRegistry.sol\":{\"keccak256\":\"0x89e09f94439c71ee32286e0b69dae389418d5700410a78884325774166584bfa\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://38c96163b3fbb6ab7c2ce49827a33f902886067d74175c42d49fe82af69b96dd\",\"dweb:/ipfs/QmVkApYrxJfxu1NsbA5GVK2tsMdr1ncLiS1e1NZceKNZbY\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -39,7 +39,7 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.21;\r\n\r\ninterface IStudentRegistry {\r\n    function getStudentInfo(address _studentAddress) \r\n        external \r\n        view \r\n        returns (\r\n            string memory name,\r\n            uint256 studentId,\r\n            uint256 yearOfStudy\r\n        );\r\n}",
+  "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.19;\r\n\r\ninterface IStudentRegistry {\r\n    function getStudentInfo(address _studentAddress) \r\n        external \r\n        view \r\n        returns (\r\n            string memory name,\r\n            uint256 studentId,\r\n            uint256 yearOfStudy\r\n        );\r\n}",
   "sourcePath": "C:\\Assignments\\CS4207\\CS4207-Blockbusters-FinalProject\\contracts\\IStudentRegistry.sol",
   "ast": {
     "absolutePath": "project:/contracts/IStudentRegistry.sol",
@@ -58,7 +58,7 @@
           "solidity",
           "^",
           "0.8",
-          ".21"
+          ".19"
         ],
         "nodeType": "PragmaDirective",
         "src": "33:24:1"
@@ -219,19 +219,18 @@
         ],
         "scope": 92,
         "src": "61:249:1",
-        "usedErrors": [],
-        "usedEvents": []
+        "usedErrors": []
       }
     ],
     "src": "33:277:1"
   },
   "compiler": {
     "name": "solc",
-    "version": "0.8.21+commit.d9974bed.Emscripten.clang"
+    "version": "0.8.19+commit.7dd6d404.Emscripten.clang"
   },
   "networks": {},
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-12-02T11:58:07.490Z",
+  "updatedAt": "2024-12-03T15:55:05.050Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
