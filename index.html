@@ -61,6 +61,26 @@
       </div>
       <button onclick="shareInterview()">Share Interview</button>
     </div>
+
+    <div class="view-section">
+      <h2>View Shared CVs</h2>
+      <button onclick="loadSharedCVs()">Load Public CVs</button>
+      <div id="cv-list" class="cv-list">
+        <!-- CVs will be populated here -->
+      </div>
+    </div>
+
+    <div class="view-section">
+      <h2>View Interview Experiences</h2>
+      <div class="form-group">
+        <label for="searchCompany">Search by Company:</label>
+        <input type="text" id="searchCompany" placeholder="Company name" />
+        <button onclick="searchInterviews()">Search</button>
+      </div>
+      <div id="interview-list" class="interview-list">
+        <!-- Interviews will be populated here -->
+      </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider"></script>
     <script src="app.js" defer></script>
