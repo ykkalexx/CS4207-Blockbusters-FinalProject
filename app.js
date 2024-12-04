@@ -466,7 +466,7 @@ async function loadSharedCVs() {
   }
 }
 
-async function searchInterviews() {
+async function showAllInterviews() {
   try {
     const currentUserInfo = await studentRegistry.methods
       .getStudentInfo(currentAccount)
@@ -477,41 +477,46 @@ async function searchInterviews() {
       return;
     }
 
-    const companyName = document.getElementById("searchCompany").value;
-    if (!companyName) {
-      alert("Please enter a company name");
-      return;
-    }
-
     const interviewList = document.getElementById("interview-list");
     interviewList.innerHTML = "<h3>Loading interviews...</h3>";
 
-    const interviews = await interviewShare.methods
-      .companyInterviews(companyName, 0)
-      .call();
+    const events = await interviewShare.getPastEvents("InterviewShared", {
+      fromBlock: 0,
+      toBlock: "latest",
+    });
 
-    if (!interviews || !interviews.length) {
-      interviewList.innerHTML = "<p>No interviews found for this company</p>";
+    const interviews = [];
+    for (const event of events) {
+      const interview = {
+        sharedBy: event.returnValues.sharer,
+        companyName: event.returnValues.companyName,
+        blockNumber: event.blockNumber,
+        timestamp: (await web3.eth.getBlock(event.blockNumber)).timestamp,
+      };
+      interviews.push(interview);
+    }
+
+    if (interviews.length === 0) {
+      interviewList.innerHTML = "<p>No interviews found</p>";
       return;
     }
 
-    interviewList.innerHTML = `
+    interviewList.innerHTML = interviews
+      .map(
+        (interview) => `
       <div class="interview-item">
-        <h3>${interviews.companyName}</h3>
-        <p><strong>Position:</strong> ${interviews.position}</p>
-        <p><strong>Questions:</strong></p>
-        <ul>
-          ${interviews.questions.map((q) => `<li>${q}</li>`).join("")}
-        </ul>
-        <p><strong>Shared by:</strong> ${interviews.sharedBy}</p>
+        <h3>${interview.companyName}</h3>
+        <p><strong>Shared by:</strong> ${interview.sharedBy}</p>
         <p><strong>Date:</strong> ${new Date(
-          interviews.timestamp * 1000
+          interview.timestamp * 1000
         ).toLocaleDateString()}</p>
       </div>
-    `;
+    `
+      )
+      .join("");
   } catch (error) {
-    console.error("Error searching interviews:", error);
-    document.getElementById("interview-list").innerHTML =
+    console.error("Error:", error);
+    interviewList.innerHTML =
       "<p>Error loading interviews. Please try again.</p>";
   }
 }

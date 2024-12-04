@@ -71,16 +71,11 @@
     </div>
 
     <div class="view-section">
-      <h2>View Interview Experiences</h2>
-      <div class="form-group">
-        <label for="searchCompany">Search by Company:</label>
-        <input type="text" id="searchCompany" placeholder="Company name" />
-        <button onclick="searchInterviews()">Search</button>
-      </div>
-      <div id="interview-list" class="interview-list">
-        <!-- Interviews will be populated here -->
-      </div>
+      <h2>View All Interview Experiences</h2>
+      <button onclick="showAllInterviews()">Show All Interviews</button>
+      <div id="interview-list" class="interview-list"></div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider"></script>
     <script src="app.js" defer></script>
