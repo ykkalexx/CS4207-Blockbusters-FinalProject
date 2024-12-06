@@ -40,13 +40,11 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.19;\r\n\r\ninterface IStudentRegistry {\r\n    function getStudentInfo(address _studentAddress) \r\n        external \r\n        view \r\n        returns (\r\n            string memory name,\r\n            uint256 studentId,\r\n            uint256 yearOfStudy\r\n        );\r\n}",
-  "sourcePath": "C:\\Assignments\\CS4207\\CS4207-Blockbusters-FinalProject\\contracts\\IStudentRegistry.sol",
+  "sourcePath": "C:\\Users\\35383\\blockchainProject\\CS4207-Blockbusters-FinalProject\\contracts\\IStudentRegistry.sol",
   "ast": {
     "absolutePath": "project:/contracts/IStudentRegistry.sol",
     "exportedSymbols": {
-      "IStudentRegistry": [
-        91
-      ]
+      "IStudentRegistry": [91]
     },
     "id": 92,
     "license": "MIT",
@@ -54,12 +52,7 @@
     "nodes": [
       {
         "id": 79,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".19"
-        ],
+        "literals": ["solidity", "^", "0.8", ".19"],
         "nodeType": "PragmaDirective",
         "src": "33:24:1"
       },
@@ -71,9 +64,7 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "id": 91,
-        "linearizedBaseContracts": [
-          91
-        ],
+        "linearizedBaseContracts": [91],
         "name": "IStudentRegistry",
         "nameLocation": "71:16:1",
         "nodeType": "ContractDefinition",
@@ -230,7 +221,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-12-04T15:10:24.846Z",
+  "updatedAt": "2024-12-04T21:43:47.842Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
