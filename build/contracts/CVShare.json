@@ -63,8 +63,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -77,8 +76,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -108,7 +106,7 @@
   "sourceMap": "96:852:0:-:0;;;;;;;;;;;;;-1:-1:-1;;96:852:0;;;;-1:-1:-1;;;;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;96:852:0;;;;;;;;-1:-1:-1;96:852:0;;-1:-1:-1;;;;;;96:852:0;;;;;;;;;;;;;;;;;-1:-1:-1;96:852:0;;;;;;-1:-1:-1;96:852:0;;;;;-1:-1:-1;96:852:0",
   "deployedSourceMap": "96:852:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;303:40;;;;96:852;;;;;;;;;;;;;;;;;:::i;:::-;303:40;;96:852;;303:40;96:852;303:40;;;96:852;303:40;;96:852;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;96:852:0;;;;;-1:-1:-1;;96:852:0;;;;;;;;;-1:-1:-1;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;96:852:0;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;629:27;96:852;;;;;;;;;;;;;;;;;;;;;;724:156;;;96:852;;;724:156;;;821:15;;96:852;;724:156;;;858:10;;96:852;;858:10;96:852;;699:10;96:852;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;906:31;96:852;;;;;;-1:-1:-1;;;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;858:10;96:852;;;;;:::i;:::-;906:31;;;96:852;;;;;;-1:-1:-1;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;906:31;96:852;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;96:852:0;;;;;-1:-1:-1;;;96:852:0;;;;;;;;-1:-1:-1;;;;96:852:0;;;;;;;;;;-1:-1:-1;;;96:852:0;;;;;;;;;;;;;-1:-1:-1;;;96:852:0;;;;;;;;;;;;;;;;-1:-1:-1;;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;96:852:0;;;;;;;;;-1:-1:-1;96:852:0;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;;;;",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.19;\r\n\r\nimport \"./StudentRegistry.sol\";\r\n\r\ncontract CVShare {\r\n    StudentRegistry public studentRegistry;\r\n    \r\n    struct CV {\r\n        string ipfsHash;\r\n        bool isPublic;\r\n        uint256 timestamp;\r\n        address owner;\r\n    }\r\n    \r\n    mapping(address => CV) public studentCVs;\r\n    \r\n    event CVShared(address indexed student, string ipfsHash);\r\n    \r\n    constructor(address _studentRegistry) {\r\n        studentRegistry = StudentRegistry(_studentRegistry);\r\n    }\r\n    \r\n    function shareCV(string memory _ipfsHash, bool _isPublic) public {\r\n        require(bytes(_ipfsHash).length > 0, \"Invalid IPFS hash\");\r\n        \r\n        studentCVs[msg.sender] = CV({\r\n            ipfsHash: _ipfsHash,\r\n            isPublic: _isPublic,\r\n            timestamp: block.timestamp,\r\n            owner: msg.sender\r\n        });\r\n        \r\n        emit CVShared(msg.sender, _ipfsHash);\r\n    }\r\n}",
-  "sourcePath": "C:\\Assignments\\CS4207\\CS4207-Blockbusters-FinalProject\\contracts\\CVShare.sol",
+  "sourcePath": "C:\\Users\\35383\\blockchainProject\\CS4207-Blockbusters-FinalProject\\contracts\\CVShare.sol",
   "ast": {
     "absolutePath": "project:/contracts/CVShare.sol",
     "exportedSymbols": {
@@ -116,7 +114,7 @@
         77
       ],
       "StudentRegistry": [
-        391
+        616
       ]
     },
     "id": 78,
@@ -141,7 +139,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 78,
-        "sourceUnit": 392,
+        "sourceUnit": 617,
         "src": "61:31:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -174,7 +172,7 @@
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_StudentRegistry_$391",
+              "typeIdentifier": "t_contract$_StudentRegistry_$616",
               "typeString": "contract StudentRegistry"
             },
             "typeName": {
@@ -187,13 +185,13 @@
                   "120:15:0"
                 ],
                 "nodeType": "IdentifierPath",
-                "referencedDeclaration": 391,
+                "referencedDeclaration": 616,
                 "src": "120:15:0"
               },
-              "referencedDeclaration": 391,
+              "referencedDeclaration": 616,
               "src": "120:15:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StudentRegistry_$391",
+                "typeIdentifier": "t_contract$_StudentRegistry_$616",
                 "typeString": "contract StudentRegistry"
               }
             },
@@ -475,7 +473,7 @@
                       "referencedDeclaration": 5,
                       "src": "474:15:0",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_StudentRegistry_$391",
+                        "typeIdentifier": "t_contract$_StudentRegistry_$616",
                         "typeString": "contract StudentRegistry"
                       }
                     },
@@ -507,10 +505,10 @@
                         "name": "StudentRegistry",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 391,
+                        "referencedDeclaration": 616,
                         "src": "492:15:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_StudentRegistry_$391_$",
+                          "typeIdentifier": "t_type$_t_contract$_StudentRegistry_$616_$",
                           "typeString": "type(contract StudentRegistry)"
                         }
                       },
@@ -526,13 +524,13 @@
                       "src": "492:33:0",
                       "tryCall": false,
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_StudentRegistry_$391",
+                        "typeIdentifier": "t_contract$_StudentRegistry_$616",
                         "typeString": "contract StudentRegistry"
                       }
                     },
                     "src": "474:51:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_StudentRegistry_$391",
+                      "typeIdentifier": "t_contract$_StudentRegistry_$616",
                       "typeString": "contract StudentRegistry"
                     }
                   },
@@ -1170,8 +1168,7 @@
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-12-03T15:55:06.124Z",
-  "networkType": "ethereum",
+  "updatedAt": "2024-12-04T21:43:47.839Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
