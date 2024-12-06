@@ -6,7 +6,6 @@ const InterviewShareArtifact = require("../../build/contracts/InterviewShare.jso
 const CVShareArtifact = require("../../build/contracts/CVShare.json");
 const MentorshipProgramArtifact = require("../../build/contracts/MentorshipProgram.json");
 
-
 const provider = ganache.provider();
 const web3 = new Web3(provider);
 
