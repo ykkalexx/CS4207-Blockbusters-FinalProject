@@ -1,0 +1,38 @@
+{
+  "students": [
+    {
+      "name": "Alice",
+      "student_id": 1,
+      "year": 4,
+      "account": 0
+    },
+    {
+      "name": "Bob",
+      "student_id": 2,
+      "year": 3,
+      "account": 1
+    }
+  ],
+  "mentors": [
+    {
+      "skills": ["Solidity", "Blockchain"],
+      "subject": "Smart Contracts",
+      "account": 0
+    }
+  ],
+  "cvs": [
+    {
+      "ipfs_hash": "QmTestHash",
+      "is_public": true,
+      "account": 0
+    }
+  ],
+  "interviews": [
+    {
+      "company_name": "Tech Corp",
+      "questions": ["What is X?", "How would you Y?"],
+      "position": "Software Engineer",
+      "account": 0
+    }
+  ]
+}
