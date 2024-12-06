@@ -4,7 +4,8 @@
     {
       "inputs": [],
       "stateMutability": "payable",
-      "type": "constructor"
+      "type": "constructor",
+      "payable": true
     },
     {
       "anonymous": false,
@@ -42,7 +43,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -61,7 +63,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -100,7 +103,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -113,7 +117,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -142,7 +147,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -184,11 +190,13 @@
   "sourceMap": "61:2014:4:-:0;;;;598:10;:24;61:2014;;598:10;662:18;;620:1;691:17;61:2014;;;;;;;;;662:18;61:2014;;;;;;;-1:-1:-1;;;61:2014:4;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "61:2014:4:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;61:2014:4;;;;;;-1:-1:-1;;;;;61:2014:4;;;;;;;;;;;;;;;;;;;269:43;;;:::i;:::-;;61:2014;269:43;;61:2014;269:43;61:2014;269:43;;;61:2014;269:43;;61:2014;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;61:2014:4;;;;;379:28;61:2014;;;;;;;;;;;;;-1:-1:-1;;61:2014:4;;;;;;414:30;-1:-1:-1;;;;;61:2014:4;;;;;;;;;;;;-1:-1:-1;;61:2014:4;;;;-1:-1:-1;;;;;61:2014:4;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1273:12;;61:2014;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;-1:-1:-1;;;61:2014:4;;;;;;;;;;;;-1:-1:-1;;;61:2014:4;;;;;;;;;;;;;-1:-1:-1;;61:2014:4;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;61:2014:4;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;61:2014:4;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;782:10;61:2014;;;;;;;;;;773:33;61:2014;;;;;;1474:23;61:2014;;1541:16;;;:37;;;61:2014;;;;;;1623:14;61:2014;;;;;;;;:::i;:::-;;;;;;;1704:196;;61:2014;;1704:196;;61:2014;;;1704:196;;61:2014;782:10;1704:196;;;61:2014;782:10;61:2014;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1704:196;;61:2014;;;;;;1704:196;;61:2014;;;;;;1704:196;61:2014;1704:196;;61:2014;;;;;;;;1704:196;61:2014;;;;;1704:196;;61:2014;;;;;;;;;;;;;;;;;;;;;;;;;782:10;61:2014;;;;;;;;;;;;;;;;;;;;;2016:48;61:2014;;;;;;;;;;;782:10;61:2014;782:10;61:2014;;;;;;:::i;:::-;2016:48;;;61:2014;;;;;;;;;;;;;;;;;-1:-1:-1;61:2014:4;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;61:2014:4;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;61:2014:4;;;;;;;;;;;;;;;;;;-1:-1:-1;;;61:2014:4;;;;;;;;;;;;-1:-1:-1;;;61:2014:4;;;;;;;;;;-1:-1:-1;;;61:2014:4;;;;;;;;;;;;-1:-1:-1;;;61:2014:4;;;;;;;1541:37;1561:17;61:2014;1561:17;;;1541:37;;61:2014;;;-1:-1:-1;;;61:2014:4;;;;;;;;;;;;-1:-1:-1;;;61:2014:4;;;;;;;;;;-1:-1:-1;;;61:2014:4;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;-1:-1:-1;61:2014:4;;;;;;;;;-1:-1:-1;61:2014:4;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;61:2014:4;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;:::o;:::-;;;;;-1:-1:-1;61:2014:4;;;;-1:-1:-1;61:2014:4;;-1:-1:-1;61:2014:4;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;61:2014:4;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.19;\r\n\r\ncontract StudentRegistry {\r\n    struct Student {\r\n        string name;\r\n        uint256 studentId;\r\n        uint256 yearOfStudy;\r\n        bool isRegistered;\r\n        address studentAddress;\r\n    }\r\n    \r\n    mapping(address => Student) public students;\r\n    mapping(uint256 => address) public studentIdToAddress;\r\n    uint256 public totalStudents;\r\n    address public immutable owner;\r\n    \r\n    event StudentRegistered(address indexed studentAddress, uint256 studentId, string name);\r\n    \r\n    constructor() payable {\r\n        require(msg.sender != address(0), \"Invalid deployer address\");\r\n        owner = msg.sender;\r\n        totalStudents = 0;\r\n    }\r\n    \r\n    modifier notRegistered() {\r\n        require(!students[msg.sender].isRegistered, \"Student already registered\");\r\n        _;\r\n    }\r\n    \r\n    modifier onlyRegistered() {\r\n        require(students[msg.sender].isRegistered, \"Student not registered\");\r\n        _;\r\n    }\r\n\r\n    function getStudentInfo(address _studentAddress) public view returns (string memory name, uint256 studentId, uint256 yearOfStudy) {\r\n        Student memory student = students[_studentAddress];\r\n        require(student.isRegistered, \"Student not found\");\r\n        return (student.name, student.studentId, student.yearOfStudy);\r\n    }\r\n    \r\n    function registerStudent(string memory _name, uint256 _studentId, uint256 _yearOfStudy) public notRegistered {\r\n        require(bytes(_name).length > 0, \"Name cannot be empty\");\r\n        require(_yearOfStudy > 0 && _yearOfStudy <= 4, \"Invalid year of study\");\r\n        require(_studentId > 0, \"Invalid student ID\");\r\n        \r\n        students[msg.sender] = Student({\r\n            name: _name,\r\n            studentId: _studentId,\r\n            yearOfStudy: _yearOfStudy,\r\n            isRegistered: true,\r\n            studentAddress: msg.sender\r\n        });\r\n        \r\n        studentIdToAddress[_studentId] = msg.sender;\r\n        totalStudents++;\r\n        \r\n        emit StudentRegistered(msg.sender, _studentId, _name);\r\n    }\r\n}",
-  "sourcePath": "C:\\Users\\35383\\blockchainProject\\CS4207-Blockbusters-FinalProject\\contracts\\StudentRegistry.sol",
+  "sourcePath": "C:\\Assignments\\CS4207\\CS4207-Blockbusters-FinalProject\\contracts\\StudentRegistry.sol",
   "ast": {
     "absolutePath": "project:/contracts/StudentRegistry.sol",
     "exportedSymbols": {
-      "StudentRegistry": [616]
+      "StudentRegistry": [
+        616
+      ]
     },
     "id": 617,
     "license": "MIT",
@@ -196,7 +204,12 @@
     "nodes": [
       {
         "id": 427,
-        "literals": ["solidity", "^", "0.8", ".19"],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".19"
+        ],
         "nodeType": "PragmaDirective",
         "src": "33:24:4"
       },
@@ -208,7 +221,9 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 616,
-        "linearizedBaseContracts": [616],
+        "linearizedBaseContracts": [
+          616
+        ],
         "name": "StudentRegistry",
         "nameLocation": "70:15:4",
         "nodeType": "ContractDefinition",
@@ -405,7 +420,9 @@
                 "pathNode": {
                   "id": 440,
                   "name": "Student",
-                  "nameLocations": ["288:7:4"],
+                  "nameLocations": [
+                    "288:7:4"
+                  ],
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 438,
                   "src": "288:7:4"
@@ -776,7 +793,10 @@
                       "id": 462,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [4294967278, 4294967278],
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
                       "referencedDeclaration": 4294967278,
                       "src": "590:7:4",
                       "typeDescriptions": {
@@ -1059,7 +1079,10 @@
                       "id": 485,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [4294967278, 4294967278],
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
                       "referencedDeclaration": 4294967278,
                       "src": "764:7:4",
                       "typeDescriptions": {
@@ -1216,7 +1239,10 @@
                       "id": 499,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [4294967278, 4294967278],
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
                       "referencedDeclaration": 4294967278,
                       "src": "906:7:4",
                       "typeDescriptions": {
@@ -1272,7 +1298,9 @@
               "src": "1132:202:4",
               "statements": [
                 {
-                  "assignments": [523],
+                  "assignments": [
+                    523
+                  ],
                   "declarations": [
                     {
                       "constant": false,
@@ -1295,7 +1323,9 @@
                         "pathNode": {
                           "id": 521,
                           "name": "Student",
-                          "nameLocations": ["1143:7:4"],
+                          "nameLocations": [
+                            "1143:7:4"
+                          ],
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 438,
                           "src": "1143:7:4"
@@ -1413,7 +1443,10 @@
                       "id": 528,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [4294967278, 4294967278],
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
                       "referencedDeclaration": 4294967278,
                       "src": "1204:7:4",
                       "typeDescriptions": {
@@ -1832,7 +1865,10 @@
                       "id": 554,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [4294967278, 4294967278],
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
                       "referencedDeclaration": 4294967278,
                       "src": "1466:7:4",
                       "typeDescriptions": {
@@ -2004,7 +2040,10 @@
                       "id": 565,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [4294967278, 4294967278],
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
                       "referencedDeclaration": 4294967278,
                       "src": "1533:7:4",
                       "typeDescriptions": {
@@ -2112,7 +2151,10 @@
                       "id": 576,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [4294967278, 4294967278],
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
                       "referencedDeclaration": 4294967278,
                       "src": "1615:7:4",
                       "typeDescriptions": {
@@ -2584,7 +2626,9 @@
                 "modifierName": {
                   "id": 551,
                   "name": "notRegistered",
-                  "nameLocations": ["1441:13:4"],
+                  "nameLocations": [
+                    "1441:13:4"
+                  ],
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 497,
                   "src": "1441:13:4"
@@ -2712,12 +2756,13 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xD1498a074f3cDDfF0b834A1750286D3BDf37C084",
-      "transactionHash": "0x2dbd5e6c2d062cfed59259cba028e7e81f8ecf22ba2f0358c3a9839aa88921f9"
+      "address": "0x92A160825D89C0F5BA3F7F08A9357069E34d4406",
+      "transactionHash": "0xd82c81e94aa3fffd8a7836f3f907d9672b51f8aa405fce46a1f648d203b80e54"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-12-04T21:43:47.850Z",
+  "updatedAt": "2024-12-06T12:33:10.625Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

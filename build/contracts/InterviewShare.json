@@ -68,7 +68,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -81,7 +82,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -116,12 +118,16 @@
   "sourceMap": "97:1368:2:-:0;;;;;;;;;;;;;-1:-1:-1;;97:1368:2;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;-1:-1:-1;97:1368:2;;-1:-1:-1;;;;;;97:1368:2;;;;;;;;;;;;;;;;;-1:-1:-1;97:1368:2;;;;;;-1:-1:-1;97:1368:2;;;;;-1:-1:-1;97:1368:2",
   "deployedSourceMap": "97:1368:2:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;97:1368:2;;;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;356:55;;;;;97:1368;356:55;;;;:::i;:::-;;;;;:::i;:::-;;;;;;;:::i;:::-;97:1368;;356:55;;97:1368;;;;;;;;356:55;;97:1368;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;356:55;97:1368;356:55;;97:1368;;;;;;-1:-1:-1;;97:1368:2;;;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;;;;:::i;:::-;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;;;;:::i;:::-;;;;;;-1:-1:-1;;;560:42:2;;591:10;97:1368;560:42;;97:1368;;;;;;;;;-1:-1:-1;;;;;97:1368:2;560:42;;;;;;97:1368;560:42;;;97:1368;;621:9;;;97:1368;;;;1011:21;97:1368;;;;;;;;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;;;;1121:208;;97:1368;;1121:208;;97:1368;1267:15;97:1368;1121:208;;97:1368;591:10;1121:208;;;97:1368;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;-1:-1:-1;;;97:1368:2;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1121:208;;97:1368;;;;-1:-1:-1;;;97:1368:2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1121:208;;;;97:1368;1121:208;;97:1368;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1121:208;;97:1368;;;;;;;1121:208;97:1368;;;;;1121:208;;97:1368;;;;;;;;;;;1413:41;97:1368;;;;;591:10;97:1368;591:10;97:1368;;;;;;:::i;:::-;1413:41;;;97:1368;;;;;-1:-1:-1;97:1368:2;;;;;;;;;;;;;;;;-1:-1:-1;;97:1368:2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;-1:-1:-1;97:1368:2;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;97:1368:2;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;97:1368:2;;;;;;;;;;;;;;;-1:-1:-1;;97:1368:2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;-1:-1:-1;97:1368:2;;;;;;;;;;;;;;-1:-1:-1;;97:1368:2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;97:1368:2;;;;;;;;;;;;;;;;;-1:-1:-1;;;97:1368:2;;;;;;;;;;-1:-1:-1;;;97:1368:2;;;;;;;;;;;;;;;;;-1:-1:-1;;;97:1368:2;;;;;;;560:42;;;;97:1368;560:42;;;;;;:::i;:::-;;;97:1368;;;;;;;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;560:42;;;97:1368;;;;;;;;;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;-1:-1:-1;;97:1368:2;;;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;97:1368:2;;;;;;;:::o;:::-;-1:-1:-1;;;;;97:1368:2;;;;;;-1:-1:-1;;97:1368:2;;;;:::o;:::-;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;:::i;:::-;;;;;;;;;;;;;-1:-1:-1;97:1368:2;;;;;;;;;;;;;;:::o;:::-;;;;;;;;-1:-1:-1;;97:1368:2;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;97:1368:2;;;-1:-1:-1;97:1368:2;;;;;-1:-1:-1;97:1368:2;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;97:1368:2;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;:::o;:::-;;;;;-1:-1:-1;97:1368:2;;;;-1:-1:-1;97:1368:2;;-1:-1:-1;97:1368:2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;97:1368:2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;-1:-1:-1;;97:1368:2;;;;:::o;:::-;;;;;;;;:::o;:::-;;;;;;;",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.19;\r\n\r\nimport \"./IStudentRegistry.sol\";\r\n\r\ncontract InterviewShare {\r\n    IStudentRegistry public studentRegistry;\r\n    \r\n    struct Interview {\r\n        string companyName;\r\n        string[] questions;\r\n        string position;\r\n        uint256 timestamp;\r\n        address sharedBy;\r\n    }\r\n    \r\n    mapping(string => Interview[]) public companyInterviews;\r\n    \r\n    event InterviewShared(address indexed sharer, string companyName);\r\n    \r\n    modifier onlyFourthYear() {\r\n        (, , uint256 year) = studentRegistry.getStudentInfo(msg.sender);\r\n        require(year == 4, \"Only 4th year students can share interviews\");\r\n        _;\r\n    }\r\n    \r\n    constructor(address _studentRegistry) {\r\n        studentRegistry = IStudentRegistry(_studentRegistry);\r\n    }\r\n    \r\n    function shareInterview(\r\n        string memory _companyName,\r\n        string[] memory _questions,\r\n        string memory _position\r\n    ) public onlyFourthYear {\r\n        require(_questions.length > 0, \"Must provide at least one question\");\r\n        \r\n        Interview memory interview = Interview({\r\n            companyName: _companyName,\r\n            questions: _questions,\r\n            position: _position,\r\n            timestamp: block.timestamp,\r\n            sharedBy: msg.sender\r\n        });\r\n        \r\n        companyInterviews[_companyName].push(interview);\r\n        emit InterviewShared(msg.sender, _companyName);\r\n    }\r\n}",
-  "sourcePath": "C:\\Users\\35383\\blockchainProject\\CS4207-Blockbusters-FinalProject\\contracts\\InterviewShare.sol",
+  "sourcePath": "C:\\Assignments\\CS4207\\CS4207-Blockbusters-FinalProject\\contracts\\InterviewShare.sol",
   "ast": {
     "absolutePath": "project:/contracts/InterviewShare.sol",
     "exportedSymbols": {
-      "IStudentRegistry": [91],
-      "InterviewShare": [200]
+      "IStudentRegistry": [
+        91
+      ],
+      "InterviewShare": [
+        200
+      ]
     },
     "id": 201,
     "license": "MIT",
@@ -129,7 +135,12 @@
     "nodes": [
       {
         "id": 93,
-        "literals": ["solidity", "^", "0.8", ".19"],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".19"
+        ],
         "nodeType": "PragmaDirective",
         "src": "33:24:2"
       },
@@ -153,7 +164,9 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 200,
-        "linearizedBaseContracts": [200],
+        "linearizedBaseContracts": [
+          200
+        ],
         "name": "InterviewShare",
         "nameLocation": "106:14:2",
         "nodeType": "ContractDefinition",
@@ -180,7 +193,9 @@
               "pathNode": {
                 "id": 95,
                 "name": "IStudentRegistry",
-                "nameLocations": ["128:16:2"],
+                "nameLocations": [
+                  "128:16:2"
+                ],
                 "nodeType": "IdentifierPath",
                 "referencedDeclaration": 91,
                 "src": "128:16:2"
@@ -396,7 +411,9 @@
                   "pathNode": {
                     "id": 111,
                     "name": "Interview",
-                    "nameLocations": ["374:9:2"],
+                    "nameLocations": [
+                      "374:9:2"
+                    ],
                     "nodeType": "IdentifierPath",
                     "referencedDeclaration": 109,
                     "src": "374:9:2"
@@ -499,7 +516,11 @@
               "src": "528:170:2",
               "statements": [
                 {
-                  "assignments": [null, null, 124],
+                  "assignments": [
+                    null,
+                    null,
+                    124
+                  ],
                   "declarations": [
                     null,
                     null,
@@ -695,7 +716,10 @@
                       "id": 131,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [4294967278, 4294967278],
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
                       "referencedDeclaration": 4294967278,
                       "src": "613:7:2",
                       "typeDescriptions": {
@@ -987,7 +1011,10 @@
                       "id": 164,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [4294967278, 4294967278],
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
                       "referencedDeclaration": 4294967278,
                       "src": "1003:7:2",
                       "typeDescriptions": {
@@ -1016,7 +1043,9 @@
                   "src": "1003:68:2"
                 },
                 {
-                  "assignments": [174],
+                  "assignments": [
+                    174
+                  ],
                   "declarations": [
                     {
                       "constant": false,
@@ -1039,7 +1068,9 @@
                         "pathNode": {
                           "id": 172,
                           "name": "Interview",
-                          "nameLocations": ["1092:9:2"],
+                          "nameLocations": [
+                            "1092:9:2"
+                          ],
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 109,
                           "src": "1092:9:2"
@@ -1405,7 +1436,9 @@
                 "modifierName": {
                   "id": 161,
                   "name": "onlyFourthYear",
-                  "nameLocations": ["977:14:2"],
+                  "nameLocations": [
+                    "977:14:2"
+                  ],
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 140,
                   "src": "977:14:2"
@@ -1542,12 +1575,13 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x585CE2c1D3ED4575EE03a39F45D77AcEA4314456",
-      "transactionHash": "0xef196547874f1683d1b550bbec65372aef3d04381762ce1c00e831bbd138c067"
+      "address": "0x3366084ED3e7AE27AEe838c3bF91Ca444Cf36BFe",
+      "transactionHash": "0x8e0ee2a5513849a45b92c50b047b4fe86fa1dfd7828bb5350868ef5ff53f9f0b"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-12-04T21:43:47.844Z",
+  "updatedAt": "2024-12-06T12:33:10.626Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

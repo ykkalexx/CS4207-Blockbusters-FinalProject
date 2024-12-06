@@ -63,7 +63,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -76,7 +77,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -106,12 +108,16 @@
   "sourceMap": "96:852:0:-:0;;;;;;;;;;;;;-1:-1:-1;;96:852:0;;;;-1:-1:-1;;;;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;96:852:0;;;;;;;;-1:-1:-1;96:852:0;;-1:-1:-1;;;;;;96:852:0;;;;;;;;;;;;;;;;;-1:-1:-1;96:852:0;;;;;;-1:-1:-1;96:852:0;;;;;-1:-1:-1;96:852:0",
   "deployedSourceMap": "96:852:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;303:40;;;;96:852;;;;;;;;;;;;;;;;;:::i;:::-;303:40;;96:852;;303:40;96:852;303:40;;;96:852;303:40;;96:852;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;96:852:0;;;;;-1:-1:-1;;96:852:0;;;;;;;;;-1:-1:-1;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;96:852:0;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;629:27;96:852;;;;;;;;;;;;;;;;;;;;;;724:156;;;96:852;;;724:156;;;821:15;;96:852;;724:156;;;858:10;;96:852;;858:10;96:852;;699:10;96:852;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;906:31;96:852;;;;;;-1:-1:-1;;;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;858:10;96:852;;;;;:::i;:::-;906:31;;;96:852;;;;;;-1:-1:-1;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;906:31;96:852;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;96:852:0;;;;;-1:-1:-1;;;96:852:0;;;;;;;;-1:-1:-1;;;;96:852:0;;;;;;;;;;-1:-1:-1;;;96:852:0;;;;;;;;;;;;;-1:-1:-1;;;96:852:0;;;;;;;;;;;;;;;;-1:-1:-1;;;96:852:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;96:852:0;;;;;;;;;-1:-1:-1;96:852:0;;;;;;;;;;;;;;;;;:::o;:::-;;;;;;;;;;;;;;;;",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.19;\r\n\r\nimport \"./StudentRegistry.sol\";\r\n\r\ncontract CVShare {\r\n    StudentRegistry public studentRegistry;\r\n    \r\n    struct CV {\r\n        string ipfsHash;\r\n        bool isPublic;\r\n        uint256 timestamp;\r\n        address owner;\r\n    }\r\n    \r\n    mapping(address => CV) public studentCVs;\r\n    \r\n    event CVShared(address indexed student, string ipfsHash);\r\n    \r\n    constructor(address _studentRegistry) {\r\n        studentRegistry = StudentRegistry(_studentRegistry);\r\n    }\r\n    \r\n    function shareCV(string memory _ipfsHash, bool _isPublic) public {\r\n        require(bytes(_ipfsHash).length > 0, \"Invalid IPFS hash\");\r\n        \r\n        studentCVs[msg.sender] = CV({\r\n            ipfsHash: _ipfsHash,\r\n            isPublic: _isPublic,\r\n            timestamp: block.timestamp,\r\n            owner: msg.sender\r\n        });\r\n        \r\n        emit CVShared(msg.sender, _ipfsHash);\r\n    }\r\n}",
-  "sourcePath": "C:\\Users\\35383\\blockchainProject\\CS4207-Blockbusters-FinalProject\\contracts\\CVShare.sol",
+  "sourcePath": "C:\\Assignments\\CS4207\\CS4207-Blockbusters-FinalProject\\contracts\\CVShare.sol",
   "ast": {
     "absolutePath": "project:/contracts/CVShare.sol",
     "exportedSymbols": {
-      "CVShare": [77],
-      "StudentRegistry": [616]
+      "CVShare": [
+        77
+      ],
+      "StudentRegistry": [
+        616
+      ]
     },
     "id": 78,
     "license": "MIT",
@@ -119,7 +125,12 @@
     "nodes": [
       {
         "id": 1,
-        "literals": ["solidity", "^", "0.8", ".19"],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".19"
+        ],
         "nodeType": "PragmaDirective",
         "src": "33:24:0"
       },
@@ -143,7 +154,9 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 77,
-        "linearizedBaseContracts": [77],
+        "linearizedBaseContracts": [
+          77
+        ],
         "name": "CVShare",
         "nameLocation": "105:7:0",
         "nodeType": "ContractDefinition",
@@ -170,7 +183,9 @@
               "pathNode": {
                 "id": 3,
                 "name": "StudentRegistry",
-                "nameLocations": ["120:15:0"],
+                "nameLocations": [
+                  "120:15:0"
+                ],
                 "nodeType": "IdentifierPath",
                 "referencedDeclaration": 616,
                 "src": "120:15:0"
@@ -349,7 +364,9 @@
                 "pathNode": {
                   "id": 16,
                   "name": "CV",
-                  "nameLocations": ["322:2:0"],
+                  "nameLocations": [
+                    "322:2:0"
+                  ],
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 14,
                   "src": "322:2:0"
@@ -725,7 +742,10 @@
                       "id": 44,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [4294967278, 4294967278],
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
                       "referencedDeclaration": 4294967278,
                       "src": "621:7:0",
                       "typeDescriptions": {
@@ -937,7 +957,12 @@
                         "810:9:0",
                         "851:5:0"
                       ],
-                      "names": ["ipfsHash", "isPublic", "timestamp", "owner"],
+                      "names": [
+                        "ipfsHash",
+                        "isPublic",
+                        "timestamp",
+                        "owner"
+                      ],
                       "nodeType": "FunctionCall",
                       "src": "724:156:0",
                       "tryCall": false,
@@ -1140,12 +1165,13 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x8ae4F7a64633e53210Eebb52b73Cb96431BC4741",
-      "transactionHash": "0x35285e2080a0b4684a0bb2ac9f67f79352131074f6a8c61f38ea63fd49bf92a6"
+      "address": "0x2ED665145A1cFB3996d14005fBcB63e416990130",
+      "transactionHash": "0xf2ce91085cd3809e1d0c1f44a49cf7712b1b004fe334b98899039320c548a9de"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-12-04T21:43:47.839Z",
+  "updatedAt": "2024-12-06T12:33:10.627Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},
