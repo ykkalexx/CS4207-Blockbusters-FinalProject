@@ -110,12 +110,8 @@
   "ast": {
     "absolutePath": "project:/contracts/CVShare.sol",
     "exportedSymbols": {
-      "CVShare": [
-        77
-      ],
-      "StudentRegistry": [
-        616
-      ]
+      "CVShare": [77],
+      "StudentRegistry": [616]
     },
     "id": 78,
     "license": "MIT",
@@ -123,12 +119,7 @@
     "nodes": [
       {
         "id": 1,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".19"
-        ],
+        "literals": ["solidity", "^", "0.8", ".19"],
         "nodeType": "PragmaDirective",
         "src": "33:24:0"
       },
@@ -152,9 +143,7 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 77,
-        "linearizedBaseContracts": [
-          77
-        ],
+        "linearizedBaseContracts": [77],
         "name": "CVShare",
         "nameLocation": "105:7:0",
         "nodeType": "ContractDefinition",
@@ -181,9 +170,7 @@
               "pathNode": {
                 "id": 3,
                 "name": "StudentRegistry",
-                "nameLocations": [
-                  "120:15:0"
-                ],
+                "nameLocations": ["120:15:0"],
                 "nodeType": "IdentifierPath",
                 "referencedDeclaration": 616,
                 "src": "120:15:0"
@@ -362,9 +349,7 @@
                 "pathNode": {
                   "id": 16,
                   "name": "CV",
-                  "nameLocations": [
-                    "322:2:0"
-                  ],
+                  "nameLocations": ["322:2:0"],
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 14,
                   "src": "322:2:0"
@@ -740,10 +725,7 @@
                       "id": 44,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        4294967278,
-                        4294967278
-                      ],
+                      "overloadedDeclarations": [4294967278, 4294967278],
                       "referencedDeclaration": 4294967278,
                       "src": "621:7:0",
                       "typeDescriptions": {
@@ -955,12 +937,7 @@
                         "810:9:0",
                         "851:5:0"
                       ],
-                      "names": [
-                        "ipfsHash",
-                        "isPublic",
-                        "timestamp",
-                        "owner"
-                      ],
+                      "names": ["ipfsHash", "isPublic", "timestamp", "owner"],
                       "nodeType": "FunctionCall",
                       "src": "724:156:0",
                       "tryCall": false,
@@ -1163,8 +1140,8 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xf1c48134D6cf832773B9E854b86F592867D5bfC0",
-      "transactionHash": "0x0726080e81cde189374ca547d1f6490caee7a47eac42d87957dcc15d148ca1a7"
+      "address": "0x8ae4F7a64633e53210Eebb52b73Cb96431BC4741",
+      "transactionHash": "0x35285e2080a0b4684a0bb2ac9f67f79352131074f6a8c61f38ea63fd49bf92a6"
     }
   },
   "schemaVersion": "3.4.16",

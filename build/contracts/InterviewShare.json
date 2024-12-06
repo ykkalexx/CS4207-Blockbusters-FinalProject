@@ -120,12 +120,8 @@
   "ast": {
     "absolutePath": "project:/contracts/InterviewShare.sol",
     "exportedSymbols": {
-      "IStudentRegistry": [
-        91
-      ],
-      "InterviewShare": [
-        200
-      ]
+      "IStudentRegistry": [91],
+      "InterviewShare": [200]
     },
     "id": 201,
     "license": "MIT",
@@ -133,12 +129,7 @@
     "nodes": [
       {
         "id": 93,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".19"
-        ],
+        "literals": ["solidity", "^", "0.8", ".19"],
         "nodeType": "PragmaDirective",
         "src": "33:24:2"
       },
@@ -162,9 +153,7 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 200,
-        "linearizedBaseContracts": [
-          200
-        ],
+        "linearizedBaseContracts": [200],
         "name": "InterviewShare",
         "nameLocation": "106:14:2",
         "nodeType": "ContractDefinition",
@@ -191,9 +180,7 @@
               "pathNode": {
                 "id": 95,
                 "name": "IStudentRegistry",
-                "nameLocations": [
-                  "128:16:2"
-                ],
+                "nameLocations": ["128:16:2"],
                 "nodeType": "IdentifierPath",
                 "referencedDeclaration": 91,
                 "src": "128:16:2"
@@ -409,9 +396,7 @@
                   "pathNode": {
                     "id": 111,
                     "name": "Interview",
-                    "nameLocations": [
-                      "374:9:2"
-                    ],
+                    "nameLocations": ["374:9:2"],
                     "nodeType": "IdentifierPath",
                     "referencedDeclaration": 109,
                     "src": "374:9:2"
@@ -514,11 +499,7 @@
               "src": "528:170:2",
               "statements": [
                 {
-                  "assignments": [
-                    null,
-                    null,
-                    124
-                  ],
+                  "assignments": [null, null, 124],
                   "declarations": [
                     null,
                     null,
@@ -714,10 +695,7 @@
                       "id": 131,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        4294967278,
-                        4294967278
-                      ],
+                      "overloadedDeclarations": [4294967278, 4294967278],
                       "referencedDeclaration": 4294967278,
                       "src": "613:7:2",
                       "typeDescriptions": {
@@ -1009,10 +987,7 @@
                       "id": 164,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        4294967278,
-                        4294967278
-                      ],
+                      "overloadedDeclarations": [4294967278, 4294967278],
                       "referencedDeclaration": 4294967278,
                       "src": "1003:7:2",
                       "typeDescriptions": {
@@ -1041,9 +1016,7 @@
                   "src": "1003:68:2"
                 },
                 {
-                  "assignments": [
-                    174
-                  ],
+                  "assignments": [174],
                   "declarations": [
                     {
                       "constant": false,
@@ -1066,9 +1039,7 @@
                         "pathNode": {
                           "id": 172,
                           "name": "Interview",
-                          "nameLocations": [
-                            "1092:9:2"
-                          ],
+                          "nameLocations": ["1092:9:2"],
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 109,
                           "src": "1092:9:2"
@@ -1434,9 +1405,7 @@
                 "modifierName": {
                   "id": 161,
                   "name": "onlyFourthYear",
-                  "nameLocations": [
-                    "977:14:2"
-                  ],
+                  "nameLocations": ["977:14:2"],
                   "nodeType": "IdentifierPath",
                   "referencedDeclaration": 140,
                   "src": "977:14:2"
@@ -1573,8 +1542,8 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xD4C1AA85DF6257B56a72AD4d97dd7f7AbEdCAD81",
-      "transactionHash": "0xa6d077c2cccc25e08b82448ebb39880158676be782f27e664ffc0d54ea180d65"
+      "address": "0x585CE2c1D3ED4575EE03a39F45D77AcEA4314456",
+      "transactionHash": "0xef196547874f1683d1b550bbec65372aef3d04381762ce1c00e831bbd138c067"
     }
   },
   "schemaVersion": "3.4.16",

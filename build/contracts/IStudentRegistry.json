@@ -44,9 +44,7 @@
   "ast": {
     "absolutePath": "project:/contracts/IStudentRegistry.sol",
     "exportedSymbols": {
-      "IStudentRegistry": [
-        91
-      ]
+      "IStudentRegistry": [91]
     },
     "id": 92,
     "license": "MIT",
@@ -54,12 +52,7 @@
     "nodes": [
       {
         "id": 79,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".19"
-        ],
+        "literals": ["solidity", "^", "0.8", ".19"],
         "nodeType": "PragmaDirective",
         "src": "33:24:1"
       },
@@ -71,9 +64,7 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "id": 91,
-        "linearizedBaseContracts": [
-          91
-        ],
+        "linearizedBaseContracts": [91],
         "name": "IStudentRegistry",
         "nameLocation": "71:16:1",
         "nodeType": "ContractDefinition",
