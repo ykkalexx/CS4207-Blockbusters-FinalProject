@@ -15,7 +15,6 @@ describe("InterviewShare Contract", () => {
       from: accounts[0],
     });
 
-    // Register a 4th year student
     await studentRegistry.registerStudent("Senior Student", 12345, 4, {
       from: accounts[0],
     });
@@ -65,6 +64,77 @@ describe("InterviewShare Contract", () => {
       } catch (error) {
         expect(error.message).toContain("Must provide at least one question");
       }
+    });
+
+    it("should handle sharing multiple interviews", async () => {
+      const numInterviews = 50;
+      jest.setTimeout(30000); // Set timeout to 30 seconds
+
+      for (let i = 0; i < numInterviews; i++) {
+        const questions = ["What is X?", "How would you Y?"];
+        const companyName = `Tech Corp ${i}`;
+        const position = `Software Engineer ${i}`;
+        const account = accounts[i % accounts.length];
+
+        // Register the student if not already registered
+        let studentInfo;
+        try {
+          studentInfo = await studentRegistry.getStudentInfo(account);
+        } catch (error) {
+          studentInfo = null;
+        }
+
+        if (!studentInfo || !studentInfo.name) {
+          await studentRegistry.registerStudent(`Student ${i}`, 10000 + i, 4, {
+            from: account,
+          });
+        }
+
+        await interviewShare.shareInterview(companyName, questions, position, {
+          from: account,
+        });
+
+        const interview = await interviewShare.companyInterviews(
+          companyName,
+          0
+        );
+        expect(interview.companyName).toBe(companyName);
+        expect(interview.position).toBe(position);
+        expect(interview.sharedBy).toBe(account);
+      }
+    });
+
+    it("should measure latency for sharing an interview", async () => {
+      const questions = ["What is X?", "How would you Y?"];
+      const companyName = "Tech Corp";
+      const position = "Software Engineer";
+
+      const startTime = Date.now();
+      await interviewShare.shareInterview(companyName, questions, position, {
+        from: accounts[0],
+      });
+      const endTime = Date.now();
+
+      const latency = endTime - startTime;
+      console.log(`Latency for sharing an interview: ${latency} ms`);
+    });
+
+    it("should measure gas cost for sharing an interview", async () => {
+      const questions = ["What is X?", "How would you Y?"];
+      const companyName = "Tech Corp";
+      const position = "Software Engineer";
+
+      const tx = await interviewShare.shareInterview(
+        companyName,
+        questions,
+        position,
+        {
+          from: accounts[0],
+        }
+      );
+
+      const gasUsed = tx.receipt.gasUsed;
+      console.log(`Gas used for sharing an interview: ${gasUsed}`);
     });
   });
 });

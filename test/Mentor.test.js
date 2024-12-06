@@ -1,25 +1,20 @@
 const { web3, StudentRegistry, MentorshipProgram } = require("./helpers/setup");
 
-//explaining thta this is test for mentor contract
 describe("MentorshipProgram Contract", () => {
-  //defining varaiabels needed for tests
   let studentRegistry;
   let mentorshipProgram;
   let accounts;
-  //runs once before we do any tests ensurinh accounts is populated
+
   beforeAll(async () => {
     accounts = await web3.eth.getAccounts();
   });
 
-  //runs before each test ensureing fresh contracts are created for each test
   beforeEach(async () => {
-    // Deploy StudentRegistry and MentorshipProgram contracts
     studentRegistry = await StudentRegistry.new({ from: accounts[0] });
     mentorshipProgram = await MentorshipProgram.new(studentRegistry.address, {
       from: accounts[0],
     });
 
-    // Register a 4th year student (mentor) and a 2nd year student (mentee)
     await studentRegistry.registerStudent("Mentor Student", 12345, 4, {
       from: accounts[0],
     });
@@ -28,9 +23,7 @@ describe("MentorshipProgram Contract", () => {
     });
   });
 
-  //tests cases for mentor registartion
   describe("Mentor Registration", () => {
-    //test if mentors can register
     it("should allow 4th year students to register as mentors", async () => {
       const skills = ["Solidity", "Blockchain"];
       const subject = "Smart Contracts";
@@ -40,11 +33,11 @@ describe("MentorshipProgram Contract", () => {
       });
 
       const mentor = await mentorshipProgram.getMentorDetails(accounts[0]);
-      expect(mentor[0]).toBe(accounts[0]);
-      expect(mentor[1]).toEqual(skills);
-      expect(mentor[2]).toBe(subject);
+      expect(mentor.mentorAddress).toBe(accounts[0]);
+      expect(mentor.skills).toEqual(skills);
+      expect(mentor.subject).toBe(subject);
     });
-    //tests that only 4th years can register as mentors
+
     it("should not allow non-4th year students to register as mentors", async () => {
       try {
         const skills = ["React", "Frontend"];
@@ -57,7 +50,7 @@ describe("MentorshipProgram Contract", () => {
         expect(error.message).toContain("Only 4th year students");
       }
     });
-    //tests that same mentor cant register more than once
+
     it("should not allow duplicate mentor registration", async () => {
       const skills = ["Solidity", "Blockchain"];
       const subject = "Smart Contracts";
@@ -75,27 +68,101 @@ describe("MentorshipProgram Contract", () => {
         expect(error.message).toContain("already registered as a mentor");
       }
     });
+
+    it("should handle registering multiple mentors", async () => {
+      const numMentors = 50;
+      jest.setTimeout(30000); // Set timeout to 30 seconds
+
+      for (let i = 0; i < numMentors; i++) {
+        const skills = ["Solidity", "Blockchain"];
+        const subject = `Smart Contracts ${i}`;
+        const account = accounts[i % accounts.length];
+
+        // Check if the student is already registered
+        let studentInfo;
+        try {
+          studentInfo = await studentRegistry.getStudentInfo(account);
+        } catch (error) {
+          studentInfo = null;
+        }
+
+        if (!studentInfo || !studentInfo.name) {
+          await studentRegistry.registerStudent(`Mentor ${i}`, 10000 + i, 4, {
+            from: account,
+          });
+        } else if (studentInfo.yearOfStudy.toNumber() !== 4) {
+          // Ensure the student is a 4th year
+          // AND ONLY 4TH YEAR NOTHING ELSE
+          continue;
+        }
+
+        // check if student is already a mentor and if it is then continue
+        let mentorInfo;
+        try {
+          mentorInfo = await mentorshipProgram.getMentorDetails(account);
+        } catch (error) {
+          mentorInfo = null;
+        }
+
+        // update this
+        if (mentorInfo && mentorInfo.mentorAddress) {
+          continue;
+        }
+
+        await mentorshipProgram.registerAsMentor(skills, subject, {
+          from: account,
+        });
+
+        const mentor = await mentorshipProgram.getMentorDetails(account);
+        expect(mentor.mentorAddress).toBe(account);
+        expect(mentor.skills).toEqual(skills);
+        expect(mentor.subject).toBe(subject);
+      }
+    });
+
+    it("should measure latency for registering a mentor", async () => {
+      const skills = ["Solidity", "Blockchain"];
+      const subject = "Smart Contracts";
+
+      const startTime = Date.now();
+      await mentorshipProgram.registerAsMentor(skills, subject, {
+        from: accounts[0],
+      });
+      const endTime = Date.now();
+
+      const latency = endTime - startTime;
+      console.log(`Latency for registering a mentor: ${latency} ms`);
+    });
+
+    it("should measure gas cost for registering a mentor", async () => {
+      const skills = ["Solidity", "Blockchain"];
+      const subject = "Smart Contracts";
+
+      const tx = await mentorshipProgram.registerAsMentor(skills, subject, {
+        from: accounts[0],
+      });
+
+      const gasUsed = tx.receipt.gasUsed;
+      console.log(`Gas used for registering a mentor: ${gasUsed}`);
+    });
   });
 
-  //tests for adding mentees to mentor groups
   describe("Adding Mentees", () => {
-    //before each test mentor is registred
     beforeEach(async () => {
-      // Register mentor
       const skills = ["Solidity", "Blockchain"];
       const subject = "Smart Contracts";
       await mentorshipProgram.registerAsMentor(skills, subject, {
         from: accounts[0],
       });
     });
-    //tests adding mentees to mentors groups
+
     it("should allow mentors to add a mentee", async () => {
       await mentorshipProgram.addMentee(accounts[1], { from: accounts[0] });
 
       const mentor = await mentorshipProgram.getMentorDetails(accounts[0]);
-      expect(mentor[3]).toContain(accounts[1]); // mentees
+      expect(mentor.mentees).toContain(accounts[1]); // mentees
     });
-    //test chacking you can only add student once
+
     it("should not allow adding the same mentee twice", async () => {
       await mentorshipProgram.addMentee(accounts[1], { from: accounts[0] });
 
@@ -108,7 +175,7 @@ describe("MentorshipProgram Contract", () => {
         );
       }
     });
-    //tests if only students who are not in 4th year can join
+
     it("should not allow adding a 4th year student as a mentee", async () => {
       try {
         await mentorshipProgram.addMentee(accounts[0], { from: accounts[0] });
