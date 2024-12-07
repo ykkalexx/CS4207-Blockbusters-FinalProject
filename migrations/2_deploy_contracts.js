@@ -1,8 +1,7 @@
 const StudentRegistry = artifacts.require("StudentRegistry");
 const InterviewShare = artifacts.require("InterviewShare");
 const CVShare = artifacts.require("CVShare");
-const Mentor = artifacts.require("MentorshipProgram");
-
+const PeerNetwork = artifacts.require("PeerNetwork");
 
 module.exports = async function (deployer, network, accounts) {
   try {
@@ -14,20 +13,17 @@ module.exports = async function (deployer, network, accounts) {
     // Deploy remaining contracts if StudentRegistry succeeds
     if (registry.address) {
       await deployer.deploy(InterviewShare, registry.address, { gas: 5000000 });
+      console.log("InterviewShare deployed at:", (await InterviewShare.deployed()).address);
+
       await deployer.deploy(CVShare, registry.address, { gas: 5000000 });
+      console.log("CVShare deployed at:", (await CVShare.deployed()).address);
+
+      // Deploy PeerNetwork contract
+      await deployer.deploy(PeerNetwork, { gas: 5000000 });
+      console.log("PeerNetwork deployed at:", (await PeerNetwork.deployed()).address);
     }
-
-      // Deploy Mentor contract, passing the StudentRegistry address
-      if (registry.address) {
-        await deployer.deploy(Mentor, registry.address, { gas: 5000000 });
-        const mentor = await Mentor.deployed();
-        console.log("Mentor contract deployed at:", mentor.address);
-      }
-
   } catch (error) {
     console.error("Deployment error:", error);
     throw error;
   }
-
-  
 };
