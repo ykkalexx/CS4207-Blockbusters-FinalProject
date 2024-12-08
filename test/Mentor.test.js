@@ -33,9 +33,9 @@ describe("MentorshipProgram Contract", () => {
       });
 
       const mentor = await mentorshipProgram.getMentorDetails(accounts[0]);
-      expect(mentor.mentorAddress).toBe(accounts[0]);
-      expect(mentor.skills).toEqual(skills);
-      expect(mentor.subject).toBe(subject);
+      expect(mentor[0]).toBe(accounts[0]);
+      expect(mentor[1]).toEqual(skills);
+      expect(mentor[2]).toBe(subject);
     });
 
     it("should not allow non-4th year students to register as mentors", async () => {
@@ -92,26 +92,17 @@ describe("MentorshipProgram Contract", () => {
           });
         } else if (studentInfo.yearOfStudy.toNumber() !== 4) {
           // Ensure the student is a 4th year
-          // AND ONLY 4TH YEAR NOTHING ELSE
           continue;
         }
 
-        // check if student is already a mentor and if it is then continue
-        let mentorInfo;
+        // register mentors but if a student is already a mentor, skip
         try {
-          mentorInfo = await mentorshipProgram.getMentorDetails(account);
+          await mentorshipProgram.registerAsMentor(skills, subject, {
+            from: account,
+          });
         } catch (error) {
-          mentorInfo = null;
-        }
-
-        // update this
-        if (mentorInfo && mentorInfo.mentorAddress) {
           continue;
         }
-
-        await mentorshipProgram.registerAsMentor(skills, subject, {
-          from: account,
-        });
 
         const mentor = await mentorshipProgram.getMentorDetails(account);
         expect(mentor.mentorAddress).toBe(account);
@@ -160,7 +151,7 @@ describe("MentorshipProgram Contract", () => {
       await mentorshipProgram.addMentee(accounts[1], { from: accounts[0] });
 
       const mentor = await mentorshipProgram.getMentorDetails(accounts[0]);
-      expect(mentor.mentees).toContain(accounts[1]); // mentees
+      expect(mentor[3]).toContain(accounts[1]); // mentees
     });
 
     it("should not allow adding the same mentee twice", async () => {

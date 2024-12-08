@@ -63,8 +63,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -77,8 +76,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -116,7 +114,7 @@
         77
       ],
       "StudentRegistry": [
-        616
+        718
       ]
     },
     "id": 78,
@@ -141,7 +139,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 78,
-        "sourceUnit": 617,
+        "sourceUnit": 719,
         "src": "61:31:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -174,7 +172,7 @@
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_StudentRegistry_$616",
+              "typeIdentifier": "t_contract$_StudentRegistry_$718",
               "typeString": "contract StudentRegistry"
             },
             "typeName": {
@@ -187,13 +185,13 @@
                   "120:15:0"
                 ],
                 "nodeType": "IdentifierPath",
-                "referencedDeclaration": 616,
+                "referencedDeclaration": 718,
                 "src": "120:15:0"
               },
-              "referencedDeclaration": 616,
+              "referencedDeclaration": 718,
               "src": "120:15:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StudentRegistry_$616",
+                "typeIdentifier": "t_contract$_StudentRegistry_$718",
                 "typeString": "contract StudentRegistry"
               }
             },
@@ -475,7 +473,7 @@
                       "referencedDeclaration": 5,
                       "src": "474:15:0",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_StudentRegistry_$616",
+                        "typeIdentifier": "t_contract$_StudentRegistry_$718",
                         "typeString": "contract StudentRegistry"
                       }
                     },
@@ -507,10 +505,10 @@
                         "name": "StudentRegistry",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 616,
+                        "referencedDeclaration": 718,
                         "src": "492:15:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_StudentRegistry_$616_$",
+                          "typeIdentifier": "t_type$_t_contract$_StudentRegistry_$718_$",
                           "typeString": "type(contract StudentRegistry)"
                         }
                       },
@@ -526,13 +524,13 @@
                       "src": "492:33:0",
                       "tryCall": false,
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_StudentRegistry_$616",
+                        "typeIdentifier": "t_contract$_StudentRegistry_$718",
                         "typeString": "contract StudentRegistry"
                       }
                     },
                     "src": "474:51:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_StudentRegistry_$616",
+                      "typeIdentifier": "t_contract$_StudentRegistry_$718",
                       "typeString": "contract StudentRegistry"
                     }
                   },
@@ -1170,8 +1168,7 @@
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-12-06T12:33:10.627Z",
-  "networkType": "ethereum",
+  "updatedAt": "2024-12-08T08:58:42.413Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

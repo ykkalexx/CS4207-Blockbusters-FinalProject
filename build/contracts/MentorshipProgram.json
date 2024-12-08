@@ -67,8 +67,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -92,8 +91,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -106,8 +104,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -172,8 +169,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_studentRegistry\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"mentor\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"mentee\",\"type\":\"address\"}],\"name\":\"MenteeAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"mentor\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"subject\",\"type\":\"string\"}],\"name\":\"MentorRegistered\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_mentee\",\"type\":\"address\"}],\"name\":\"addMentee\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_mentor\",\"type\":\"address\"}],\"name\":\"getMentorDetails\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"mentorAddress\",\"type\":\"address\"},{\"internalType\":\"string[]\",\"name\":\"skills\",\"type\":\"string[]\"},{\"internalType\":\"string\",\"name\":\"subject\",\"type\":\"string\"},{\"internalType\":\"address[]\",\"name\":\"mentees\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"menteeToMentor\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"mentors\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"mentorAddress\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"subject\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string[]\",\"name\":\"_skills\",\"type\":\"string[]\"},{\"internalType\":\"string\",\"name\":\"_subject\",\"type\":\"string\"}],\"name\":\"registerAsMentor\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"studentRegistry\",\"outputs\":[{\"internalType\":\"contract IStudentRegistry\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Mentor.sol\":\"MentorshipProgram\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[],\"viaIR\":true},\"sources\":{\"project:/contracts/IStudentRegistry.sol\":{\"keccak256\":\"0x89e09f94439c71ee32286e0b69dae389418d5700410a78884325774166584bfa\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://38c96163b3fbb6ab7c2ce49827a33f902886067d74175c42d49fe82af69b96dd\",\"dweb:/ipfs/QmVkApYrxJfxu1NsbA5GVK2tsMdr1ncLiS1e1NZceKNZbY\"]},\"project:/contracts/Mentor.sol\":{\"keccak256\":\"0x0c8ca120cc80b529e906b653589c67e533a0342c2795f7b3e7f0d17bb8671f1f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://65a973207a1711d44590d0a1fb4290868b2a741785776133d67e62020667900e\",\"dweb:/ipfs/QmVmJuPsL9XfLN2JThwys6kDjoNAbuKKNQQPMsFHnD7sXa\"]}},\"version\":1}",
@@ -3185,8 +3181,7 @@
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-12-06T12:33:10.629Z",
-  "networkType": "ethereum",
+  "updatedAt": "2024-12-08T08:58:42.418Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

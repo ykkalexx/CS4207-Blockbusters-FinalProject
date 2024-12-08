@@ -5,6 +5,7 @@ const StudentRegistryArtifact = require("../../build/contracts/StudentRegistry.j
 const InterviewShareArtifact = require("../../build/contracts/InterviewShare.json");
 const CVShareArtifact = require("../../build/contracts/CVShare.json");
 const MentorshipProgramArtifact = require("../../build/contracts/MentorshipProgram.json");
+const PeerNetworkArtifact = require("../../build/contracts/PeerNetwork.json");
 
 const provider = ganache.provider();
 const web3 = new Web3(provider);
@@ -13,11 +14,13 @@ const StudentRegistry = contract(StudentRegistryArtifact);
 const InterviewShare = contract(InterviewShareArtifact);
 const CVShare = contract(CVShareArtifact);
 const MentorshipProgram = contract(MentorshipProgramArtifact);
+const PeerNetwork = contract(PeerNetworkArtifact);
 
 StudentRegistry.setProvider(provider);
 InterviewShare.setProvider(provider);
 CVShare.setProvider(provider);
 MentorshipProgram.setProvider(provider);
+PeerNetwork.setProvider(provider);
 
 module.exports = {
   web3,
@@ -25,5 +28,6 @@ module.exports = {
   InterviewShare,
   CVShare,
   MentorshipProgram,
+  PeerNetwork,
   provider,
 };
