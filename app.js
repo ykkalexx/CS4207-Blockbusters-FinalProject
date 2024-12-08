@@ -9,11 +9,11 @@ let peerNetwork;
 let currentAccount;
 let mentorshipProgram;
 
-const studentRegistryAddress = "0x92A160825D89C0F5BA3F7F08A9357069E34d4406";
-const cvShareAddress = "0x2ED665145A1cFB3996d14005fBcB63e416990130";
-const interviewShareAddress = "0x3366084ED3e7AE27AEe838c3bF91Ca444Cf36BFe";
-const peerNetworkAddress = "0xeaBEC35d03B8FC1981C6239EFEB0FD3e1BE86649";
-const mentorshipNetworkAddress = "0x08Ac38B9E2594aAc780Dba9f7d7c26761558c226";
+const studentRegistryAddress = "0xF225E490651C795F9C8F9a6846aE0E789879fB83";
+const cvShareAddress = "0x8B155776FcB9BA0aD0d116701d914f7369c7f5f2";
+const interviewShareAddress = "0xA628E932AF349915c606A70585e8Fc79f10cC566";
+const peerNetworkAddress = "0xd40825688C40288b9f78d865114c563C59A468A8";
+const mentorshipNetworkAddress = "0x9Df68981BdCe20Ede4BA892480788F1DEB2F919f";
 
 const PeerNetworkABI = [
   {
@@ -700,9 +700,38 @@ async function init() {
       MentorshipProgramABI,
       mentorshipProgramAddress
     );
+
+    // Set up event listeners for contract events
+    setupEventListeners();
   } catch (error) {
     console.error("Initialization failed:", error);
   }
+}
+
+function setupEventListeners() {
+  studentRegistry.events
+    .StudentRegistered()
+    .on("data", (event) => {
+      console.log("New student registered:", event.returnValues);
+      refreshStudentInfo();
+    })
+    .on("error", console.error);
+
+  cvShare.events
+    .CVShared()
+    .on("data", (event) => {
+      console.log("New CV shared:", event.returnValues);
+      refreshCVList();
+    })
+    .on("error", console.error);
+
+  interviewShare.events
+    .InterviewShared()
+    .on("data", (event) => {
+      console.log("New interview shared:", event.returnValues);
+      refreshInterviews();
+    })
+    .on("error", console.error);
 }
 
 window.addEventListener("load", init);
@@ -710,13 +739,23 @@ window.addEventListener("load", init);
 async function registerStudent() {
   try {
     const name = document.getElementById("studentName").value;
-    const id = document.getElementById("studentId").value;
-    const year = document.getElementById("yearOfStudy").value;
+    const id = parseInt(document.getElementById("studentId").value);
+    const year = parseInt(document.getElementById("yearOfStudy").value);
+
+    if (!name || !id || !year) {
+      throw new Error("All fields are required");
+    }
+
+    if (year < 1 || year > 4) {
+      throw new Error("Year of study must be between 1 and 4");
+    }
 
     await studentRegistry.methods
       .registerStudent(name, id, year)
       .send({ from: currentAccount });
+
     alert("Student registered successfully!");
+    refreshStudentInfo();
   } catch (error) {
     alert("Error registering student: " + error.message);
   }
@@ -727,10 +766,16 @@ async function shareCV() {
     const ipfsHash = document.getElementById("ipfsHash").value;
     const isPublic = document.getElementById("isPublic").checked;
 
+    if (!ipfsHash) {
+      throw new Error("IPFS hash is required");
+    }
+
     await cvShare.methods
       .shareCV(ipfsHash, isPublic)
       .send({ from: currentAccount });
+
     alert("CV shared successfully!");
+    refreshCVList();
   } catch (error) {
     alert("Error sharing CV: " + error.message);
   }
@@ -743,12 +788,21 @@ async function shareInterview() {
     const questions = document
       .getElementById("questions")
       .value.split(",")
-      .map((q) => q.trim());
+      .map((q) => q.trim())
+      .filter((q) => q.length > 0);
+
+    if (!companyName || !position || questions.length === 0) {
+      throw new Error(
+        "All fields are required and at least one question must be provided"
+      );
+    }
 
     await interviewShare.methods
       .shareInterview(companyName, questions, position)
       .send({ from: currentAccount });
+
     alert("Interview experience shared successfully!");
+    refreshInterviews();
   } catch (error) {
     alert("Error sharing interview: " + error.message);
   }
@@ -758,16 +812,22 @@ async function addCompany() {
   try {
     const company = document.getElementById("addCompany").value;
 
+    if (!company) {
+      throw new Error("Company name is required");
+    }
+
     await peerNetwork.methods
       .addCompany(company)
       .send({ from: currentAccount });
+
     alert(`Company ${company} added successfully!`);
+    refreshCompanies();
   } catch (error) {
     alert("Error adding company: " + error.message);
   }
 }
 
-async function viewCompanies() {
+async function refreshCompanies() {
   try {
     const companies = await peerNetwork.methods.getCompanies().call();
     const companyList = document.getElementById("companyList");
@@ -775,21 +835,7 @@ async function viewCompanies() {
       .map((company) => `<li>${company}</li>`)
       .join("");
   } catch (error) {
-    alert("Error fetching companies: " + error.message);
-  }
-}
-
-async function linkCVToCompany() {
-  try {
-    const company = document.getElementById("linkCompany").value;
-    const ipfsHash = document.getElementById("linkCV").value;
-
-    await peerNetwork.methods
-      .linkCVToCompany(company, ipfsHash)
-      .send({ from: currentAccount });
-    alert(`CV linked to ${company} successfully!`);
-  } catch (error) {
-    alert("Error linking CV to company: " + error.message);
+    console.error("Error fetching companies:", error);
   }
 }
 
@@ -798,116 +844,96 @@ async function registerAsMentor() {
     const skills = document
       .getElementById("mentorSkills")
       .value.split(",")
-      .map((s) => s.trim());
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
     const subject = document.getElementById("mentorSubject").value;
 
-    const studentInfo = await studentRegistry.methods
-      .getStudentInfo(currentAccount)
-      .call();
-
-    if (Number(studentInfo.yearOfStudy) !== 4) {
-      alert("Only 4th year students can register as mentors.");
-      return;
+    if (!subject || skills.length === 0) {
+      throw new Error("Subject and at least one skill are required");
     }
 
     await mentorshipProgram.methods
       .registerAsMentor(skills, subject)
       .send({ from: currentAccount });
+
     alert("Registered as mentor successfully!");
+    refreshMentors();
   } catch (error) {
-    console.error("Register mentor error:", error);
     alert("Error registering as mentor: " + error.message);
   }
 }
 
-async function viewMentors() {
+async function addMentee() {
   try {
-    const studentInfo = await studentRegistry.methods
-      .getStudentInfo(currentAccount)
-      .call();
+    const menteeAddress = document.getElementById("menteeAddress").value;
+    const paymentAmount = web3.utils.toWei(
+      document.getElementById("paymentAmount").value,
+      "ether"
+    );
 
-    if (Number(studentInfo.yearOfStudy) === 4) {
-      alert("4th year students cannot view the mentors list.");
-      return;
+    if (!web3.utils.isAddress(menteeAddress)) {
+      throw new Error("Invalid mentee address");
     }
 
-    const totalStudents = await studentRegistry.methods.totalStudents().call();
-    const mentorList = document.getElementById("mentorList");
-    mentorList.innerHTML = "";
+    await mentorshipProgram.methods
+      .addMentee(menteeAddress)
+      .send({ from: currentAccount, value: paymentAmount });
 
-    for (let i = 0; i < totalStudents; i++) {
-      try {
-        const studentAddress = await studentRegistry.methods
-          .studentIdToAddress(i)
-          .call();
-        const mentorDetails = await mentorshipProgram.methods
-          .getMentorDetails(studentAddress)
-          .call();
-
-        if (
-          mentorDetails.mentorAddress !==
-          "0x0000000000000000000000000000000000000000"
-        ) {
-          const mentorItem = `<li>
-            <strong>Address:</strong> ${mentorDetails.mentorAddress}<br>
-            <strong>Skills:</strong> ${mentorDetails.skills.join(", ")}<br>
-            <strong>Subject:</strong> ${mentorDetails.subject}<br>
-            <strong>Mentees:</strong> ${mentorDetails.mentees.join(", ")}
-          </li>`;
-          mentorList.innerHTML += mentorItem;
-        }
-      } catch (err) {
-        console.warn(`Error fetching mentor at index ${i}:`, err);
-        continue;
-      }
-    }
+    alert("Mentee added successfully!");
+    refreshMentors();
   } catch (error) {
-    console.error("View mentors error:", error);
-    alert("Error fetching mentors: " + error.message);
+    alert("Error adding mentee: " + error.message);
   }
 }
 
-async function viewInterviews() {
+async function refreshInterviews() {
   try {
-    const studentInfo = await studentRegistry.methods
-      .getStudentInfo(currentAccount)
-      .call();
-    if (Number(studentInfo.yearOfStudy) === 4) {
-      alert("4th year students cannot view the interview questions.");
-      return;
-    }
-
-    const totalStudents = await studentRegistry.methods.totalStudents().call();
+    const interviews = await interviewShare.methods.getAllInterviews().call();
     const interviewList = document.getElementById("interviewList");
-    interviewList.innerHTML = "";
 
-    for (let i = 0; i < totalStudents; i++) {
-      try {
-        const studentAddress = await studentRegistry.methods
-          .studentIdToAddress(i)
-          .call();
-        const studentInterviews = await interviewShare.methods
-          .companyInterviews(studentAddress, 0)
-          .call();
-
-        if (studentInterviews.companyName) {
-          const interviewItem = `<li>
-            <strong>Company:</strong> ${studentInterviews.companyName}<br>
-            <strong>Position:</strong> ${studentInterviews.position}<br>
-            <strong>Questions:</strong> ${studentInterviews.questions.join(
-              ", "
-            )}<br>
-            <strong>Shared By:</strong> ${studentInterviews.sharedBy}
-          </li>`;
-          interviewList.innerHTML += interviewItem;
-        }
-      } catch (err) {
-        console.warn(`Error fetching interview at index ${i}:`, err);
-        continue;
-      }
-    }
+    interviewList.innerHTML = interviews
+      .map(
+        (interview) => `
+        <li>
+          <strong>Company:</strong> ${interview.companyName}<br>
+          <strong>Position:</strong> ${interview.position}<br>
+          <strong>Questions:</strong> ${interview.questions.join(", ")}<br>
+          <strong>Shared By:</strong> ${interview.sharedBy}<br>
+          <strong>Date:</strong> ${new Date(
+            interview.timestamp * 1000
+          ).toLocaleDateString()}
+        </li>
+      `
+      )
+      .join("");
   } catch (error) {
-    console.error("View interviews error:", error);
-    alert("Error fetching interviews: " + error.message);
+    console.error("Error fetching interviews:", error);
   }
 }
+
+// Helper function to refresh student info
+async function refreshStudentInfo() {
+  try {
+    const studentInfo = await studentRegistry.methods
+      .getStudentInfo(currentAccount)
+      .call();
+
+    document.getElementById("currentStudentInfo").innerHTML = `
+      <p>Name: ${studentInfo.name}</p>
+      <p>Student ID: ${studentInfo.studentId}</p>
+      <p>Year of Study: ${studentInfo.yearOfStudy}</p>
+    `;
+  } catch (error) {
+    console.error("Error fetching student info:", error);
+  }
+}
+
+// Initial refresh calls
+async function refreshAll() {
+  await refreshStudentInfo();
+  await refreshCompanies();
+  await refreshInterviews();
+  await refreshMentors();
+}
+
+refreshAll();
