@@ -1,16 +1,117 @@
 console.log("Loading app.js");
-console.log("tst");
 
 let web3;
+console.log("Web3 initialized:", web3);
 let studentRegistry;
 let cvShare;
 let interviewShare;
+let peerNetwork;
 let currentAccount;
 
-const studentRegistryAddress = "0x92A160825D89C0F5BA3F7F08A9357069E34d4406";
-const cvShareAddress = "0x2ED665145A1cFB3996d14005fBcB63e416990130";
-const interviewShareAddress = "0x3366084ED3e7AE27AEe838c3bF91Ca444Cf36BFe";
-const mentorshipProgramAddress = "0x08Ac38B9E2594aAc780Dba9f7d7c26761558c226";
+const studentRegistryAddress = "0x0FB05C09C59aC73844CFc544b972128707f163Ff";
+const cvShareAddress = "0x6c529c8540C8B04EE07ccd998A3ecd4Ca5281f55";
+const interviewShareAddress = "0x08E5b7a6d37E0DA5E79842674eb86db968EbC74B";
+const peerNetworkAddress = "0xeaBEC35d03B8FC1981C6239EFEB0FD3e1BE86649";
+
+const PeerNetworkABI = [
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "string",
+        name: "company",
+        type: "string",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "ipfsHash",
+        type: "string",
+      },
+    ],
+    name: "CVLinkedToCompany",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "string",
+        name: "company",
+        type: "string",
+      },
+    ],
+    name: "CompanyAdded",
+    type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_company",
+        type: "string",
+      },
+    ],
+    name: "addCompany",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getCompanies",
+    outputs: [
+      {
+        internalType: "string[]",
+        name: "",
+        type: "string[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_company",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "_ipfsHash",
+        type: "string",
+      },
+    ],
+    name: "linkCVToCompany",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_company",
+        type: "string",
+      },
+    ],
+    name: "getCVsForCompany",
+    outputs: [
+      {
+        internalType: "string[]",
+        name: "",
+        type: "string[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+];
+
+
 
 const StudentRegistryABI = [
   {
@@ -43,6 +144,94 @@ const StudentRegistryABI = [
     ],
     name: "StudentRegistered",
     type: "event",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+    constant: true,
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "studentIdToAddress",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+    constant: true,
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "students",
+    outputs: [
+      {
+        internalType: "string",
+        name: "name",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "studentId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "yearOfStudy",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "isRegistered",
+        type: "bool",
+      },
+      {
+        internalType: "address",
+        name: "studentAddress",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+    constant: true,
+  },
+  {
+    inputs: [],
+    name: "totalStudents",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+    constant: true,
   },
   {
     inputs: [
@@ -256,11 +445,6 @@ const InterviewShareABI = [
         type: "string",
       },
       {
-        internalType: "string[]",
-        name: "questions",
-        type: "string[]",
-      },
-      {
         internalType: "uint256",
         name: "timestamp",
         type: "uint256",
@@ -268,6 +452,20 @@ const InterviewShareABI = [
       {
         internalType: "address",
         name: "sharedBy",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+    constant: true,
+  },
+  {
+    inputs: [],
+    name: "studentRegistry",
+    outputs: [
+      {
+        internalType: "contract IStudentRegistry",
+        name: "",
         type: "address",
       },
     ],
@@ -300,242 +498,38 @@ const InterviewShareABI = [
   },
 ];
 
-const MentorshipProgramABI = [
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_studentRegistry",
-        type: "address",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "mentor",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "mentee",
-        type: "address",
-      },
-    ],
-    name: "MenteeAdded",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "mentor",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "subject",
-        type: "string",
-      },
-    ],
-    name: "MentorRegistered",
-    type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "menteeToMentor",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "mentors",
-    outputs: [
-      {
-        internalType: "address",
-        name: "mentorAddress",
-        type: "address",
-      },
-      {
-        internalType: "string",
-        name: "subject",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "studentRegistry",
-    outputs: [
-      {
-        internalType: "contract IStudentRegistry",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string[]",
-        name: "_skills",
-        type: "string[]",
-      },
-      {
-        internalType: "string",
-        name: "_subject",
-        type: "string",
-      },
-    ],
-    name: "registerAsMentor",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_mentee",
-        type: "address",
-      },
-    ],
-    name: "addMentee",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_mentor",
-        type: "address",
-      },
-    ],
-    name: "getMentorDetails",
-    outputs: [
-      {
-        internalType: "address",
-        name: "mentorAddress",
-        type: "address",
-      },
-      {
-        internalType: "string[]",
-        name: "skills",
-        type: "string[]",
-      },
-      {
-        internalType: "string",
-        name: "subject",
-        type: "string",
-      },
-      {
-        internalType: "address[]",
-        name: "mentees",
-        type: "address[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-];
 
-function isValidAddress(address) {
-  return web3.utils.isAddress(address);
+async function waitForEthereum(maxRetries = 10) {
+  let retries = 0;
+  while (retries < maxRetries) {
+    if (window.ethereum) return true;
+    console.log(`Waiting for Ethereum... Attempt ${retries + 1}`);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    retries++;
+  }
+  return false;
 }
 
 async function init() {
-  if (typeof window.ethereum === "undefined") {
-    alert("Please install MetaMask!");
-    return;
-  }
-
   try {
-    // Request account access
-    await window.ethereum.request({ method: "eth_requestAccounts" });
+    const hasEthereum = await waitForEthereum();
+    if (!hasEthereum) {
+      throw new Error("MetaMask not detected after retries");
+    }
 
-    // Create Web3 instance
     web3 = new Web3(window.ethereum);
-
-    // Get current account
+    await window.ethereum.request({ method: "eth_requestAccounts" });
     const accounts = await web3.eth.getAccounts();
     currentAccount = accounts[0];
-
-    // Get current network
-    const networkId = await web3.eth.net.getId();
-    console.log("Network ID:", networkId);
+    console.log("Connected:", currentAccount);
 
     // Initialize contracts
-    studentRegistry = new web3.eth.Contract(
-      StudentRegistryABI,
-      web3.utils.toChecksumAddress(studentRegistryAddress)
-    );
-
-    cvShare = new web3.eth.Contract(
-      CVShareABI,
-      web3.utils.toChecksumAddress(cvShareAddress)
-    );
-
-    interviewShare = new web3.eth.Contract(
-      InterviewShareABI,
-      web3.utils.toChecksumAddress(interviewShareAddress)
-    );
-
-    mentorshipProgram = new web3.eth.Contract(
-      MentorshipProgramABI,
-      web3.utils.toChecksumAddress(mentorshipProgramAddress)
-    );
-
-    console.log("Initialization complete");
-
-    // Check user's year and show appropriate mentorship section
-    const userInfo = await studentRegistry.methods
-      .getStudentInfo(currentAccount)
-      .call();
-    const yearOfStudy = parseInt(userInfo.yearOfStudy);
-
-    if (yearOfStudy === 4) {
-      document.getElementById("mentor-registration").style.display = "block";
-    } else if (yearOfStudy >= 1 && yearOfStudy <= 3) {
-      document.getElementById("mentee-section").style.display = "block";
-      loadMentors();
-    }
+    studentRegistry = new web3.eth.Contract(StudentRegistryABI, studentRegistryAddress);
+    cvShare = new web3.eth.Contract(CVShareABI, cvShareAddress);
+    interviewShare = new web3.eth.Contract(InterviewShareABI, interviewShareAddress);
+    peerNetwork = new web3.eth.Contract(PeerNetworkABI, peerNetworkAddress);
   } catch (error) {
-    console.error("Detailed error:", error);
-    alert("Failed to initialize Web3: " + error.message);
+    console.error("Initialization failed:", error);
   }
 }
 
@@ -543,31 +537,14 @@ window.addEventListener("load", init);
 
 async function registerStudent() {
   try {
-    if (!studentRegistry || !currentAccount) {
-      throw new Error("Contract or account not initialized");
-    }
-
     const name = document.getElementById("studentName").value;
-    const id = parseInt(document.getElementById("studentId").value);
-    const year = parseInt(document.getElementById("yearOfStudy").value);
+    const id = document.getElementById("studentId").value;
+    const year = document.getElementById("yearOfStudy").value;
 
-    // Input validation
-    if (!name || isNaN(id) || isNaN(year)) {
-      throw new Error("Invalid input values");
-    }
-
-    const tx = await studentRegistry.methods
-      .registerStudent(name, id, year)
-      .send({
-        from: currentAccount,
-        gas: 300000, // Specify gas limit
-      });
-
-    console.log("Transaction:", tx);
+    await studentRegistry.methods.registerStudent(name, id, year).send({ from: currentAccount });
     alert("Student registered successfully!");
   } catch (error) {
-    console.error("Registration error:", error);
-    alert("Failed to register: " + error.message);
+    alert("Error registering student: " + error.message);
   }
 }
 
@@ -576,9 +553,7 @@ async function shareCV() {
     const ipfsHash = document.getElementById("ipfsHash").value;
     const isPublic = document.getElementById("isPublic").checked;
 
-    await cvShare.methods
-      .shareCV(ipfsHash, isPublic)
-      .send({ from: currentAccount });
+    await cvShare.methods.shareCV(ipfsHash, isPublic).send({ from: currentAccount });
     alert("CV shared successfully!");
   } catch (error) {
     alert("Error sharing CV: " + error.message);
@@ -589,263 +564,44 @@ async function shareInterview() {
   try {
     const companyName = document.getElementById("companyName").value;
     const position = document.getElementById("position").value;
-    const questions = document
-      .getElementById("questions")
-      .value.split(",")
-      .map((q) => q.trim());
+    const questions = document.getElementById("questions").value.split(",").map((q) => q.trim());
 
-    await interviewShare.methods
-      .shareInterview(companyName, questions, position)
-      .send({ from: currentAccount });
+    await interviewShare.methods.shareInterview(companyName, questions, position).send({ from: currentAccount });
     alert("Interview experience shared successfully!");
   } catch (error) {
     alert("Error sharing interview: " + error.message);
   }
 }
 
-async function loadSharedCVs() {
+async function addCompany() {
   try {
-    const currentUserInfo = await studentRegistry.methods
-      .getStudentInfo(currentAccount)
-      .call();
-    const yearOfStudy = parseInt(currentUserInfo.yearOfStudy);
-    if (yearOfStudy < 1 || yearOfStudy > 3) {
-      alert("Only students in years 1-3 can view shared CVs");
-      return;
-    }
+    const company = document.getElementById("addCompany").value;
 
-    const cvList = document.getElementById("cv-list");
-    cvList.innerHTML = "<h3>Loading CVs...</h3>";
-
-    const totalStudents = await studentRegistry.methods.totalStudents().call();
-    const cvs = [];
-
-    for (let i = 0; i < totalStudents; i++) {
-      const studentAddress = await studentRegistry.methods
-        .studentIdToAddress(i)
-        .call();
-      const cv = await cvShare.methods.studentCVs(studentAddress).call();
-
-      if (cv.isPublic && cv.ipfsHash) {
-        cvs.push({
-          owner: cv.owner,
-          ipfsHash: cv.ipfsHash,
-          timestamp: new Date(cv.timestamp * 1000).toLocaleDateString(),
-        });
-      }
-    }
-
-    cvList.innerHTML =
-      cvs.length === 0
-        ? "<p>No public CVs found</p>"
-        : cvs
-            .map(
-              (cv) => `
-        <div class="cv-item">
-          <p><strong>Owner:</strong> ${cv.owner}</p>
-          <p><strong>IPFS Hash:</strong> ${cv.ipfsHash}</p>
-          <p><strong>Shared on:</strong> ${cv.timestamp}</p>
-          <button onclick="viewIPFSContent('${cv.ipfsHash}')">View CV</button>
-        </div>
-      `
-            )
-            .join("");
+    await peerNetwork.methods.addCompany(company).send({ from: currentAccount });
+    alert(`Company ${company} added successfully!`);
   } catch (error) {
-    console.error("Error loading CVs:", error);
-    document.getElementById("cv-list").innerHTML =
-      "<p>Error loading CVs. Please try again.</p>";
+    alert("Error adding company: " + error.message);
   }
 }
 
-async function showAllInterviews() {
+async function viewCompanies() {
   try {
-    const currentUserInfo = await studentRegistry.methods
-      .getStudentInfo(currentAccount)
-      .call();
-    const yearOfStudy = parseInt(currentUserInfo.yearOfStudy);
-    if (yearOfStudy < 1 || yearOfStudy > 3) {
-      alert("Only students in years 1-3 can view interview experiences");
-      return;
-    }
-
-    const interviewList = document.getElementById("interview-list");
-    interviewList.innerHTML = "<h3>Loading interviews...</h3>";
-
-    const events = await interviewShare.getPastEvents("InterviewShared", {
-      fromBlock: 0,
-      toBlock: "latest",
-    });
-
-    const interviews = [];
-    for (const event of events) {
-      const interview = {
-        sharedBy: event.returnValues.sharer,
-        companyName: event.returnValues.companyName,
-        blockNumber: event.blockNumber,
-        timestamp: (await web3.eth.getBlock(event.blockNumber)).timestamp,
-      };
-      interviews.push(interview);
-    }
-
-    if (interviews.length === 0) {
-      interviewList.innerHTML = "<p>No interviews found</p>";
-      return;
-    }
-
-    interviewList.innerHTML = interviews
-      .map(
-        (interview) => `
-      <div class="interview-item">
-        <h3>${interview.companyName}</h3>
-        <p><strong>Shared by:</strong> ${interview.sharedBy}</p>
-        <p><strong>Date:</strong> ${new Date(
-          interview.timestamp * 1000
-        ).toLocaleDateString()}</p>
-      </div>
-    `
-      )
-      .join("");
+    const companies = await peerNetwork.methods.getCompanies().call();
+    const companyList = document.getElementById("companyList");
+    companyList.innerHTML = companies.map((company) => `<li>${company}</li>`).join("");
   } catch (error) {
-    console.error("Error:", error);
-    interviewList.innerHTML =
-      "<p>Error loading interviews. Please try again.</p>";
+    alert("Error fetching companies: " + error.message);
   }
 }
 
-async function viewIPFSContent(ipfsHash) {
-  window.open(`https://ipfs.io/ipfs/${ipfsHash}`, "_blank");
-}
-
-async function checkStudentStatus() {
+async function linkCVToCompany() {
   try {
-    const info = await studentRegistry.methods
-      .getStudentInfo(currentAccount)
-      .call();
-    console.log("Student registration status:", {
-      address: currentAccount,
-      name: info.name,
-      studentId: info.studentId.toString(),
-      yearOfStudy: info.yearOfStudy.toString(),
-    });
-    return info;
+    const company = document.getElementById("linkCompany").value;
+    const ipfsHash = document.getElementById("linkCV").value;
+
+    await peerNetwork.methods.linkCVToCompany(company, ipfsHash).send({ from: currentAccount });
+    alert(`CV linked to ${company} successfully!`);
   } catch (error) {
-    console.error("Error checking student status:", error);
-    throw error;
+    alert("Error linking CV to company: " + error.message);
   }
 }
-
-async function registerAsMentor() {
-  try {
-    // First verify student status
-    const studentInfo = await checkStudentStatus();
-
-    const skills = document
-      .getElementById("mentor-skills")
-      .value.split(",")
-      .map((s) => s.trim());
-    const subject = document.getElementById("mentor-subject").value;
-
-    // Let's check if the contract method exists and is callable
-    console.log("Contract ABI:", mentorshipProgram.methods);
-    console.log("Calling method:", {
-      methodName: "registerAsMentor",
-      parameters: [skills, subject],
-    });
-
-    // Let's try to encode the function call to verify parameters
-    const encodedCall = mentorshipProgram.methods
-      .registerAsMentor(skills, subject)
-      .encodeABI();
-    console.log("Encoded call:", encodedCall);
-
-    // Try to get gas estimate first
-    try {
-      const gasEstimate = await mentorshipProgram.methods
-        .registerAsMentor(skills, subject)
-        .estimateGas({ from: currentAccount });
-      console.log("Gas estimate successful:", gasEstimate);
-    } catch (gasError) {
-      console.error("Gas estimation failed:", gasError);
-      // Try with hardcoded gas limit if estimation fails
-      console.log("Attempting transaction with fixed gas limit...");
-    }
-
-    // Add the actual transaction
-    const tx = await mentorshipProgram.methods
-      .registerAsMentor(skills, subject)
-      .send({
-        from: currentAccount,
-        gas: 500000, // Increased gas limit
-      });
-
-    console.log("Transaction successful:", tx);
-    alert("Successfully registered as mentor!");
-  } catch (error) {
-    if (error.message.includes("revert")) {
-      // Parse the revert reason if available
-      const revertReason = error.message.match(/revert\s(.+?)"/);
-      if (revertReason && revertReason[1]) {
-        console.error("Contract reverted with reason:", revertReason[1]);
-      }
-    }
-    console.error("Full error:", error);
-    alert("Failed to register as mentor: " + error.message);
-  }
-}
-
-async function loadMentors() {
-  try {
-    const mentorList = document.getElementById("mentor-list");
-    mentorList.innerHTML = "<p>Loading mentors...</p>";
-
-    // Get past events for mentor registration
-    const events = await mentorshipProgram.getPastEvents("MentorRegistered", {
-      fromBlock: 0,
-      toBlock: "latest",
-    });
-
-    if (events.length === 0) {
-      mentorList.innerHTML = "<p>No mentors available</p>";
-      return;
-    }
-
-    let mentorsHtml = "";
-    for (const event of events) {
-      const mentorAddress = event.returnValues.mentor;
-      const details = await mentorshipProgram.methods
-        .getMentorDetails(mentorAddress)
-        .call();
-
-      mentorsHtml += `
-        <div class="mentor-item">
-          <h4>Mentor: ${mentorAddress}</h4>
-          <p><strong>Subject:</strong> ${details.subject}</p>
-          <p><strong>Skills:</strong> ${details.skills.join(", ")}</p>
-          <p><strong>Current Mentees:</strong> ${details.mentees.length}</p>
-          <button onclick="joinMentor('${mentorAddress}')">Join This Mentor</button>
-        </div>
-      `;
-    }
-
-    mentorList.innerHTML = mentorsHtml;
-  } catch (error) {
-    console.error("Error loading mentors:", error);
-    mentorList.innerHTML = "<p>Error loading mentors. Please try again.</p>";
-  }
-}
-
-async function joinMentor(mentorAddress) {
-  try {
-    await mentorshipProgram.methods.addMentee(currentAccount).send({
-      from: currentAccount,
-      gas: 300000,
-    });
-    alert("Successfully joined mentor group!");
-    loadMentors();
-  } catch (error) {
-    console.error("Error joining mentor:", error);
-    alert("Failed to join mentor: " + error.message);
-  }
-}
-
-window.addEventListener("load", init);

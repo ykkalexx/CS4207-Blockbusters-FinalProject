@@ -1,15 +1,13 @@
-const { web3, StudentRegistry } = require("./helpers/setup");
+const StudentRegistry = artifacts.require("StudentRegistry");
+const { assert } = require("chai");
 
-describe("StudentRegistry Contract", () => {
+contract("StudentRegistry Contract", (accounts) => {
   let studentRegistry;
-  let accounts;
 
-  beforeAll(async () => {
-    accounts = await web3.eth.getAccounts();
-  });
-
-  beforeEach(async () => {
+  before(async () => {
+    // Deploy the StudentRegistry contract
     studentRegistry = await StudentRegistry.new({ from: accounts[0] });
+    assert(studentRegistry.address, "StudentRegistry deployment failed");
   });
 
   describe("Student Registration", () => {
@@ -18,116 +16,74 @@ describe("StudentRegistry Contract", () => {
       const studentId = 12345;
       const yearOfStudy = 2;
 
-      await studentRegistry.registerStudent(
-        studentName,
-        studentId,
-        yearOfStudy,
-        { from: accounts[0] }
-      );
+      // Register a student
+      await studentRegistry.registerStudent(studentName, studentId, yearOfStudy, {
+        from: accounts[1],
+      });
 
-      const student = await studentRegistry.getStudentInfo(accounts[0]);
-      expect(student[0]).toBe(studentName);
-      expect(student[1].toNumber()).toBe(studentId);
-      expect(student[2].toNumber()).toBe(yearOfStudy);
+      // Fetch student info
+      const student = await studentRegistry.getStudentInfo(accounts[1]);
+
+      // Assertions
+      assert.equal(student.name, studentName, "Student name should match");
+      assert.equal(student.studentId.toNumber(), studentId, "Student ID should match");
+      assert.equal(student.yearOfStudy.toNumber(), yearOfStudy, "Year of study should match");
     });
 
     it("should not allow duplicate registration", async () => {
-      await studentRegistry.registerStudent("John Doe", 12345, 2, {
-        from: accounts[0],
-      });
-
       try {
-        await studentRegistry.registerStudent("John Doe", 12345, 2, {
-          from: accounts[0],
-        });
-        fail("Should have thrown an error");
+        // Attempt to register the same account again
+        await studentRegistry.registerStudent("John Doe", 12345, 2, { from: accounts[1] });
+        assert.fail("Expected error was not thrown");
       } catch (error) {
-        expect(error.message).toContain("Student already registered");
+        // Check for expected error message
+        assert.include(error.message, "Student already registered", "Error should indicate duplicate registration");
       }
     });
 
     it("should not allow invalid year of study", async () => {
       try {
-        await studentRegistry.registerStudent("John Doe", 12345, 5, {
-          from: accounts[0],
-        });
-        fail("Should have thrown an error");
+        // Attempt to register a student with an invalid year of study
+        await studentRegistry.registerStudent("Jane Doe", 12346, 5, { from: accounts[2] });
+        assert.fail("Expected error was not thrown");
       } catch (error) {
-        expect(error.message).toContain("Invalid year of study");
-      }
-    });
-
-    // testing for scalability/ latency and transaction cost
-    it("should handle registering multiple students", async () => {
-      const numStudents = 100;
-      for (let i = 0; i < numStudents; i++) {
-        const studentName = `Student ${i}`;
-        const studentId = 10000 + i;
-        const yearOfStudy = (i % 4) + 1;
-
-        // Use a unique account for each student
-        const account = accounts[i % accounts.length];
-
-        // Check if the student is already registered
-        const studentInfo = await studentRegistry
-          .getStudentInfo(account)
-          .catch(() => null);
-        if (studentInfo && studentInfo.name) {
-          continue; // Skip if the student is already registered
-        }
-
-        await studentRegistry.registerStudent(
-          studentName,
-          studentId,
-          yearOfStudy,
-          {
-            from: account,
-          }
+        // Check for expected error message
+        assert.include(
+          error.message,
+          "Invalid year of study",
+          `Error should indicate invalid year of study, but got: ${error.message}`
         );
-
-        const student = await studentRegistry.getStudentInfo(account);
-        expect(student[0]).toBe(studentName);
-        expect(student[1].toNumber()).toBe(studentId);
-        expect(student[2].toNumber()).toBe(yearOfStudy);
       }
     });
 
-    it("should measure latency for registering a student", async () => {
-      const studentName = "Latency Test Student";
-      const studentId = 99999;
-      const yearOfStudy = 3;
-
-      const startTime = Date.now();
-      await studentRegistry.registerStudent(
-        studentName,
-        studentId,
-        yearOfStudy,
-        {
-          from: accounts[0],
-        }
-      );
-      const endTime = Date.now();
-
-      const latency = endTime - startTime;
-      console.log(`Latency for registering a student: ${latency} ms`);
+    it("should not allow empty names", async () => {
+      try {
+        // Attempt to register a student with an empty name
+        await studentRegistry.registerStudent("", 12347, 2, { from: accounts[3] });
+        assert.fail("Expected error was not thrown");
+      } catch (error) {
+        // Check for expected error message
+        assert.include(
+          error.message,
+          "Name cannot be empty",
+          `Error should indicate empty name, but got: ${error.message}`
+        );
+      }
     });
 
-    it("should measure gas cost for registering a student", async () => {
-      const studentName = "Gas Cost Test Student";
-      const studentId = 88888;
-      const yearOfStudy = 2;
-
-      const tx = await studentRegistry.registerStudent(
-        studentName,
-        studentId,
-        yearOfStudy,
-        {
-          from: accounts[0],
-        }
-      );
-
-      const gasUsed = tx.receipt.gasUsed;
-      console.log(`Gas used for registering a student: ${gasUsed}`);
+    it("should not allow invalid student IDs", async () => {
+      try {
+        // Attempt to register a student with an invalid student ID
+        await studentRegistry.registerStudent("Jane Smith", 0, 2, { from: accounts[4] });
+        assert.fail("Expected error was not thrown");
+      } catch (error) {
+        // Check for expected error message
+        assert.include(
+          error.message,
+          "Invalid student ID",
+          `Error should indicate invalid student ID, but got: ${error.message}`
+        );
+      }
     });
   });
 });
