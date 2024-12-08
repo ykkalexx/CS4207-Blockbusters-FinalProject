@@ -7,6 +7,7 @@ let cvShare;
 let interviewShare;
 let peerNetwork;
 let currentAccount;
+let mentorshipProgram;
 
 const studentRegistryAddress = "0x92A160825D89C0F5BA3F7F08A9357069E34d4406";
 const cvShareAddress = "0x2ED665145A1cFB3996d14005fBcB63e416990130";
@@ -803,7 +804,8 @@ async function registerAsMentor() {
     const studentInfo = await studentRegistry.methods
       .getStudentInfo(currentAccount)
       .call();
-    if (studentInfo.yearOfStudy !== 4) {
+
+    if (Number(studentInfo.yearOfStudy) !== 4) {
       alert("Only 4th year students can register as mentors.");
       return;
     }
@@ -813,6 +815,7 @@ async function registerAsMentor() {
       .send({ from: currentAccount });
     alert("Registered as mentor successfully!");
   } catch (error) {
+    console.error("Register mentor error:", error);
     alert("Error registering as mentor: " + error.message);
   }
 }
@@ -822,7 +825,8 @@ async function viewMentors() {
     const studentInfo = await studentRegistry.methods
       .getStudentInfo(currentAccount)
       .call();
-    if (studentInfo.yearOfStudy === 4) {
+
+    if (Number(studentInfo.yearOfStudy) === 4) {
       alert("4th year students cannot view the mentors list.");
       return;
     }
@@ -832,27 +836,78 @@ async function viewMentors() {
     mentorList.innerHTML = "";
 
     for (let i = 0; i < totalStudents; i++) {
-      const studentAddress = await studentRegistry.methods
-        .studentIdToAddress(i)
-        .call();
-      const mentorDetails = await mentorshipProgram.methods
-        .getMentorDetails(studentAddress)
-        .call();
+      try {
+        const studentAddress = await studentRegistry.methods
+          .studentIdToAddress(i)
+          .call();
+        const mentorDetails = await mentorshipProgram.methods
+          .getMentorDetails(studentAddress)
+          .call();
 
-      if (
-        mentorDetails.mentorAddress !==
-        "0x0000000000000000000000000000000000000000"
-      ) {
-        const mentorItem = `<li>
-          <strong>Address:</strong> ${mentorDetails.mentorAddress}<br>
-          <strong>Skills:</strong> ${mentorDetails.skills.join(", ")}<br>
-          <strong>Subject:</strong> ${mentorDetails.subject}<br>
-          <strong>Mentees:</strong> ${mentorDetails.mentees.join(", ")}
-        </li>`;
-        mentorList.innerHTML += mentorItem;
+        if (
+          mentorDetails.mentorAddress !==
+          "0x0000000000000000000000000000000000000000"
+        ) {
+          const mentorItem = `<li>
+            <strong>Address:</strong> ${mentorDetails.mentorAddress}<br>
+            <strong>Skills:</strong> ${mentorDetails.skills.join(", ")}<br>
+            <strong>Subject:</strong> ${mentorDetails.subject}<br>
+            <strong>Mentees:</strong> ${mentorDetails.mentees.join(", ")}
+          </li>`;
+          mentorList.innerHTML += mentorItem;
+        }
+      } catch (err) {
+        console.warn(`Error fetching mentor at index ${i}:`, err);
+        continue;
       }
     }
   } catch (error) {
+    console.error("View mentors error:", error);
     alert("Error fetching mentors: " + error.message);
+  }
+}
+
+async function viewInterviews() {
+  try {
+    const studentInfo = await studentRegistry.methods
+      .getStudentInfo(currentAccount)
+      .call();
+    if (Number(studentInfo.yearOfStudy) === 4) {
+      alert("4th year students cannot view the interview questions.");
+      return;
+    }
+
+    const totalStudents = await studentRegistry.methods.totalStudents().call();
+    const interviewList = document.getElementById("interviewList");
+    interviewList.innerHTML = "";
+
+    for (let i = 0; i < totalStudents; i++) {
+      try {
+        const studentAddress = await studentRegistry.methods
+          .studentIdToAddress(i)
+          .call();
+        const studentInterviews = await interviewShare.methods
+          .companyInterviews(studentAddress, 0)
+          .call();
+
+        if (studentInterviews.companyName) {
+          const interviewItem = `<li>
+            <strong>Company:</strong> ${studentInterviews.companyName}<br>
+            <strong>Position:</strong> ${studentInterviews.position}<br>
+            <strong>Questions:</strong> ${studentInterviews.questions.join(
+              ", "
+            )}<br>
+            <strong>Shared By:</strong> ${studentInterviews.sharedBy}
+          </li>`;
+          interviewList.innerHTML += interviewItem;
+        }
+      } catch (err) {
+        console.warn(`Error fetching interview at index ${i}:`, err);
+        continue;
+      }
+    }
+  } catch (error) {
+    console.error("View interviews error:", error);
+    alert("Error fetching interviews: " + error.message);
   }
 }
