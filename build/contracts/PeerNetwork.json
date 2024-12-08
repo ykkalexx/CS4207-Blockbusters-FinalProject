@@ -56,15 +56,15 @@
     "absolutePath": "project:/contracts/PeerNetwork.sol",
     "exportedSymbols": {
       "PeerNetwork": [
-        609
+        627
       ]
     },
-    "id": 610,
+    "id": 628,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 576,
+        "id": 594,
         "literals": [
           "solidity",
           "^",
@@ -81,9 +81,9 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 609,
+        "id": 627,
         "linearizedBaseContracts": [
-          609
+          627
         ],
         "name": "PeerNetwork",
         "nameLocation": "70:11:4",
@@ -91,12 +91,12 @@
         "nodes": [
           {
             "constant": false,
-            "id": 579,
+            "id": 597,
             "mutability": "mutable",
             "name": "companies",
             "nameLocation": "153:9:4",
             "nodeType": "VariableDeclaration",
-            "scope": 609,
+            "scope": 627,
             "src": "136:26:4",
             "stateVariable": true,
             "storageLocation": "default",
@@ -106,7 +106,7 @@
             },
             "typeName": {
               "baseType": {
-                "id": 577,
+                "id": 595,
                 "name": "string",
                 "nodeType": "ElementaryTypeName",
                 "src": "136:6:4",
@@ -115,7 +115,7 @@
                   "typeString": "string"
                 }
               },
-              "id": 578,
+              "id": 596,
               "nodeType": "ArrayTypeName",
               "src": "136:8:4",
               "typeDescriptions": {
@@ -128,23 +128,23 @@
           {
             "anonymous": false,
             "eventSelector": "fcc4771a4f6c9c3664806c6257d496276f658e3e74a09ba078ba9acbede30762",
-            "id": 583,
+            "id": 601,
             "name": "CompanyAdded",
             "nameLocation": "177:12:4",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 582,
+              "id": 600,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 581,
+                  "id": 599,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "company",
                   "nameLocation": "197:7:4",
                   "nodeType": "VariableDeclaration",
-                  "scope": 583,
+                  "scope": 601,
                   "src": "190:14:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -153,7 +153,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 580,
+                    "id": 598,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "190:6:4",
@@ -171,7 +171,7 @@
           },
           {
             "body": {
-              "id": 598,
+              "id": 616,
               "nodeType": "Block",
               "src": "299:81:4",
               "statements": [
@@ -179,11 +179,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 591,
+                        "id": 609,
                         "name": "_company",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 585,
+                        "referencedDeclaration": 603,
                         "src": "325:8:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -199,18 +199,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 588,
+                        "id": 606,
                         "name": "companies",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 579,
+                        "referencedDeclaration": 597,
                         "src": "310:9:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_string_storage_$dyn_storage",
                           "typeString": "string storage ref[] storage ref"
                         }
                       },
-                      "id": 590,
+                      "id": 608,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -224,7 +224,7 @@
                         "typeString": "function (string storage ref[] storage pointer,string storage ref)"
                       }
                     },
-                    "id": 592,
+                    "id": 610,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -240,7 +240,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 593,
+                  "id": 611,
                   "nodeType": "ExpressionStatement",
                   "src": "310:24:4"
                 },
@@ -248,11 +248,11 @@
                   "eventCall": {
                     "arguments": [
                       {
-                        "id": 595,
+                        "id": 613,
                         "name": "_company",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 585,
+                        "referencedDeclaration": 603,
                         "src": "363:8:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -267,18 +267,18 @@
                           "typeString": "string memory"
                         }
                       ],
-                      "id": 594,
+                      "id": 612,
                       "name": "CompanyAdded",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 583,
+                      "referencedDeclaration": 601,
                       "src": "350:12:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (string memory)"
                       }
                     },
-                    "id": 596,
+                    "id": 614,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -294,14 +294,14 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 597,
+                  "id": 615,
                   "nodeType": "EmitStatement",
                   "src": "345:27:4"
                 }
               ]
             },
             "functionSelector": "d6483d17",
-            "id": 599,
+            "id": 617,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -309,17 +309,17 @@
             "nameLocation": "257:10:4",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 586,
+              "id": 604,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 585,
+                  "id": 603,
                   "mutability": "mutable",
                   "name": "_company",
                   "nameLocation": "282:8:4",
                   "nodeType": "VariableDeclaration",
-                  "scope": 599,
+                  "scope": 617,
                   "src": "268:22:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -328,7 +328,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 584,
+                    "id": 602,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "268:6:4",
@@ -343,12 +343,12 @@
               "src": "267:24:4"
             },
             "returnParameters": {
-              "id": 587,
+              "id": 605,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "299:0:4"
             },
-            "scope": 609,
+            "scope": 627,
             "src": "248:132:4",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -356,32 +356,32 @@
           },
           {
             "body": {
-              "id": 607,
+              "id": 625,
               "nodeType": "Block",
               "src": "489:35:4",
               "statements": [
                 {
                   "expression": {
-                    "id": 605,
+                    "id": 623,
                     "name": "companies",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 579,
+                    "referencedDeclaration": 597,
                     "src": "507:9:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_string_storage_$dyn_storage",
                       "typeString": "string storage ref[] storage ref"
                     }
                   },
-                  "functionReturnParameters": 604,
-                  "id": 606,
+                  "functionReturnParameters": 622,
+                  "id": 624,
                   "nodeType": "Return",
                   "src": "500:16:4"
                 }
               ]
             },
             "functionSelector": "0c0b6691",
-            "id": 608,
+            "id": 626,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -389,23 +389,23 @@
             "nameLocation": "436:12:4",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 600,
+              "id": 618,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "448:2:4"
             },
             "returnParameters": {
-              "id": 604,
+              "id": 622,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 603,
+                  "id": 621,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 608,
+                  "scope": 626,
                   "src": "472:15:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -415,7 +415,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 601,
+                      "id": 619,
                       "name": "string",
                       "nodeType": "ElementaryTypeName",
                       "src": "472:6:4",
@@ -424,7 +424,7 @@
                         "typeString": "string"
                       }
                     },
-                    "id": 602,
+                    "id": 620,
                     "nodeType": "ArrayTypeName",
                     "src": "472:8:4",
                     "typeDescriptions": {
@@ -437,14 +437,14 @@
               ],
               "src": "471:17:4"
             },
-            "scope": 609,
+            "scope": 627,
             "src": "427:97:4",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 610,
+        "scope": 628,
         "src": "61:466:4",
         "usedErrors": []
       }
@@ -459,12 +459,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x7731989425368583eD1D316Cf3D644eb30474F87",
-      "transactionHash": "0x244c19dc3f0b595eeecd3a9d236e97690e9b324dd74723ceee3ca0d2fd26baca"
+      "address": "0xd40825688C40288b9f78d865114c563C59A468A8",
+      "transactionHash": "0x1a4cb5db1d4cbb1e1416dbda1b97d937ff6e64dfc20b018af7de483998007e7d"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-12-08T11:32:06.282Z",
+  "updatedAt": "2024-12-08T15:51:32.332Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

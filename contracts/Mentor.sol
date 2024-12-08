@@ -1,4 +1,3 @@
-
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 //Importing IStudentRegistry to interact with student registry and call functions
@@ -74,7 +73,7 @@ contract MentorshipProgram {
     }
 
     //function to add mentee to a mentors group, ensures only registered mentors can use this 
-    function addMentee(address _mentee) public onlyRegisteredMentor {
+    function addMentee(address _mentee) public payable onlyRegisteredMentor {
         //ensureing student is not already assigned to this mentor
         require(
             menteeToMentor[_mentee] == address(0),
@@ -91,6 +90,10 @@ contract MentorshipProgram {
         menteeToMentor[_mentee] = msg.sender;
         //log new mentee being added to mentor group
         emit MenteeAdded(msg.sender, _mentee);
+
+        // Transfer funds to the mentor
+        require(msg.value > 0, "No funds sent");
+        payable(msg.sender).transfer(msg.value);
     }
 
     //Getter for the mentors data
@@ -108,4 +111,3 @@ contract MentorshipProgram {
         return (mentor.mentorAddress, mentor.skills, mentor.subject, mentor.mentees);
     }
 }
-

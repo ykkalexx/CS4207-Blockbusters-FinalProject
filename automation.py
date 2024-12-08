@@ -28,11 +28,11 @@ with open("build/contracts/PeerNetwork.json") as f:
     peer_network_data = json.load(f)
 
 # Contract addresses
-student_registry_address = "0xD3C8F2f5A129902028E25cE0c897F2BE6EDDdaAE"
-cv_share_address = "0xDc98bd1D9B8110f217fa5033BFEfaBA8800d82E0"
-interview_share_address = "0xc385D19713eDB912092a95004a5DefDFdc5C672a"
-mentorship_program_address = "0x37a4a8658Cf877FA528d3f82D5B088dd7a4937fF"
-peer_network_address = "0x7731989425368583eD1D316Cf3D644eb30474F87"
+student_registry_address = "0xF225E490651C795F9C8F9a6846aE0E789879fB83"
+cv_share_address = "0x8B155776FcB9BA0aD0d116701d914f7369c7f5f2"
+interview_share_address = "0xA628E932AF349915c606A70585e8Fc79f10cC566"
+mentorship_program_address = "0x9Df68981BdCe20Ede4BA892480788F1DEB2F919f"
+peer_network_address = "0xd40825688C40288b9f78d865114c563C59A468A8"
 
 # Initialize contracts
 student_registry = web3.eth.contract(address=student_registry_address, abi=student_registry_data["abi"])
@@ -138,6 +138,24 @@ def add_company(company_name, account):
         print(f"Error adding company: {e}")
         return False
 
+def add_mentee(mentor_account, mentee_account, amount):
+    """Add a mentee to a mentor's group and transfer funds"""
+    try:
+        # Convert amount from Ether to Wei using Web3.to_wei()
+        amount_wei = web3.to_wei(amount, 'ether')
+        tx_hash = mentorship_program.functions.addMentee(
+            web3.to_checksum_address(mentee_account)
+        ).transact({
+            "from": web3.to_checksum_address(mentor_account),
+            "value": amount_wei
+        })
+        receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
+        print(f"Successfully added mentee {mentee_account} to mentor {mentor_account} with {amount} Ether")
+        return True
+    except Exception as e:
+        print(f"Error adding mentee: {e}")
+        return False
+
 def view_companies():
     """View all companies in the peer network"""
     try:
@@ -161,59 +179,79 @@ def view_interviews():
         print(f"Error viewing interviews: {e}")
 
 def main():
-    # Generate and register new random students
-    num_students = 5  # Number of new students to register
-    students_registered = 0
-    student_id_start = 5000  # Start with high numbers to avoid conflicts
+    # First find two unregistered accounts
+    unregistered_accounts = []
     
-    print("Attempting to register new random students...")
+    print("Finding unregistered accounts...")
+    for account in accounts:
+        if not is_student_registered(account):
+            unregistered_accounts.append(account)
+            if len(unregistered_accounts) == 2:
+                break
     
-    for i in range(num_students):
-        if i >= len(accounts):
-            print("Not enough accounts available for all students")
-            break
-            
-        name = generate_random_name()
-        student_id = student_id_start + i
-        year = random.randint(1, 4)  # Valid years are typically 1-4
-        
-        if register_student(name, student_id, year, accounts[i]):
-            students_registered += 1
+    if len(unregistered_accounts) < 2:
+        print("Error: Need 2 unregistered accounts, but found only", len(unregistered_accounts))
+        return
     
-    print(f"Successfully registered {students_registered} new random students")
-
-    # Register mentor (as a 4th year student)
-    mentor_account = accounts[num_students] if len(accounts) > num_students else accounts[0]
+    # Use first unregistered account for 4th year student (mentor)
+    mentor_account = unregistered_accounts[0]
     mentor_name = generate_random_name()
-    mentor_registered = register_mentor(
+    print(f"\nRegistering 4th year student (future mentor) {mentor_name}...")
+    
+    mentor_success = register_student(
         name=mentor_name,
         student_id=9999,
-        skills=["Solidity", "Blockchain"],
-        subject="Smart Contracts",
+        year=4,  # Explicitly 4th year
         account=mentor_account
     )
     
-    if mentor_registered:
-        print(f"\nProceeding with mentor ({mentor_name}) activities...")
-        # Share CV
-        if share_cv("QmTestHash", True, mentor_account):
-            print("CV sharing completed")
+    # Use second unregistered account for 3rd year student (mentee)
+    mentee_account = unregistered_accounts[1]
+    mentee_name = generate_random_name()
+    print(f"\nRegistering 3rd year student (future mentee) {mentee_name}...")
+    
+    mentee_success = register_student(
+        name=mentee_name,
+        student_id=8888,
+        year=3,  # Explicitly 3rd year
+        account=mentee_account
+    )
+    
+    if mentor_success and mentee_success:
+        print("\nRegistering 4th year student as mentor...")
         
-        # Share interview experience
-        if share_interview("Tech Corp", ["What is X?", "How would you Y?"], "Software Engineer", mentor_account):
-            print("Interview sharing completed")
+        # Register the 4th year student as mentor
+        mentor_registered = register_mentor(
+            name=mentor_name,
+            student_id=9999,
+            skills=["Solidity", "Blockchain"],
+            subject="Smart Contracts",
+            account=mentor_account
+        )
         
-        # Add company
-        if add_company("Tech Corp", mentor_account):
-            print("Company addition completed")
-
-    # View all companies
-    print("\nViewing all companies:")
-    view_companies()
-
-    # View all interview questions
-    print("\nViewing all interview questions:")
-    view_interviews()
+        if mentor_registered:
+            print(f"\nAttempting to add {mentee_name} as mentee...")
+            
+            # Add the 3rd year student as mentee
+            if add_mentee(mentor_account, mentee_account, 0.1):  # Transfer 0.1 Ether
+                print(f"\nSuccessfully set up mentor-mentee relationship between {mentor_name} and {mentee_name}")
+                
+                # Share mentor's CV and interview experience
+                share_cv("QmTestHash", True, mentor_account)
+                share_interview("Tech Corp", ["What is X?", "How would you Y?"], "Software Engineer", mentor_account)
+                add_company("Tech Corp", mentor_account)
+                
+                # View final state
+                print("\nViewing all companies:")
+                view_companies()
+                print("\nViewing all interview questions:")
+                view_interviews()
+            else:
+                print("\nFailed to add mentee to mentor's group")
+        else:
+            print("\nFailed to register mentor")
+    else:
+        print("\nFailed to register one or both students")
 
 if __name__ == "__main__":
     main()
