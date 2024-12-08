@@ -928,6 +928,24 @@ async function refreshStudentInfo() {
   }
 }
 
+// refreshMentors function
+async function refreshMentors() {
+  try {
+    const mentorDetails = await mentorshipProgram.methods
+      .getMentorDetails(currentAccount)
+      .call();
+
+    const mentorList = document.getElementById("mentorList");
+    mentorList.innerHTML = `
+      <p><strong>Subject:</strong> ${mentorDetails.subject}</p>
+      <p><strong>Skills:</strong> ${mentorDetails.skills.join(", ")}</p>
+      <p><strong>Mentees:</strong> ${mentorDetails.mentees.join(", ")}</p>
+    `;
+  } catch (error) {
+    console.error("Error fetching mentor details:", error);
+  }
+}
+
 // Initial refresh calls
 async function refreshAll() {
   await refreshStudentInfo();
