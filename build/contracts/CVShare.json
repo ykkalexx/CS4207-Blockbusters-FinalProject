@@ -63,7 +63,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -76,7 +77,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -114,7 +116,7 @@
         77
       ],
       "StudentRegistry": [
-        718
+        800
       ]
     },
     "id": 78,
@@ -139,7 +141,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 78,
-        "sourceUnit": 719,
+        "sourceUnit": 801,
         "src": "61:31:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -172,7 +174,7 @@
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_StudentRegistry_$718",
+              "typeIdentifier": "t_contract$_StudentRegistry_$800",
               "typeString": "contract StudentRegistry"
             },
             "typeName": {
@@ -185,13 +187,13 @@
                   "120:15:0"
                 ],
                 "nodeType": "IdentifierPath",
-                "referencedDeclaration": 718,
+                "referencedDeclaration": 800,
                 "src": "120:15:0"
               },
-              "referencedDeclaration": 718,
+              "referencedDeclaration": 800,
               "src": "120:15:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StudentRegistry_$718",
+                "typeIdentifier": "t_contract$_StudentRegistry_$800",
                 "typeString": "contract StudentRegistry"
               }
             },
@@ -473,7 +475,7 @@
                       "referencedDeclaration": 5,
                       "src": "474:15:0",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_StudentRegistry_$718",
+                        "typeIdentifier": "t_contract$_StudentRegistry_$800",
                         "typeString": "contract StudentRegistry"
                       }
                     },
@@ -505,10 +507,10 @@
                         "name": "StudentRegistry",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 718,
+                        "referencedDeclaration": 800,
                         "src": "492:15:0",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_StudentRegistry_$718_$",
+                          "typeIdentifier": "t_type$_t_contract$_StudentRegistry_$800_$",
                           "typeString": "type(contract StudentRegistry)"
                         }
                       },
@@ -524,13 +526,13 @@
                       "src": "492:33:0",
                       "tryCall": false,
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_StudentRegistry_$718",
+                        "typeIdentifier": "t_contract$_StudentRegistry_$800",
                         "typeString": "contract StudentRegistry"
                       }
                     },
                     "src": "474:51:0",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_StudentRegistry_$718",
+                      "typeIdentifier": "t_contract$_StudentRegistry_$800",
                       "typeString": "contract StudentRegistry"
                     }
                   },
@@ -1163,12 +1165,13 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x2ED665145A1cFB3996d14005fBcB63e416990130",
-      "transactionHash": "0xf2ce91085cd3809e1d0c1f44a49cf7712b1b004fe334b98899039320c548a9de"
+      "address": "0xDc98bd1D9B8110f217fa5033BFEfaBA8800d82E0",
+      "transactionHash": "0xc165abdcbce48fa3304a66bbc948dfa5290765ef113e4d98a0c474b93442872e"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-12-08T08:58:42.413Z",
+  "updatedAt": "2024-12-08T11:32:06.279Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

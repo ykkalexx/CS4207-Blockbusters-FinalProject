@@ -28,11 +28,11 @@ with open("build/contracts/PeerNetwork.json") as f:
     peer_network_data = json.load(f)
 
 # Contract addresses
-student_registry_address = "0x92A160825D89C0F5BA3F7F08A9357069E34d4406"
-cv_share_address = "0x2ED665145A1cFB3996d14005fBcB63e416990130"
-interview_share_address = "0x3366084ED3e7AE27AEe838c3bF91Ca444Cf36BFe"
-mentorship_program_address = "0x08Ac38B9E2594aAc780Dba9f7d7c26761558c226"
-peer_network_address = "0xeaBEC35d03B8FC1981C6239EFEB0FD3e1BE86649"
+student_registry_address = "0xD3C8F2f5A129902028E25cE0c897F2BE6EDDdaAE"
+cv_share_address = "0xDc98bd1D9B8110f217fa5033BFEfaBA8800d82E0"
+interview_share_address = "0xc385D19713eDB912092a95004a5DefDFdc5C672a"
+mentorship_program_address = "0x37a4a8658Cf877FA528d3f82D5B088dd7a4937fF"
+peer_network_address = "0x7731989425368583eD1D316Cf3D644eb30474F87"
 
 # Initialize contracts
 student_registry = web3.eth.contract(address=student_registry_address, abi=student_registry_data["abi"])
@@ -44,9 +44,9 @@ peer_network = web3.eth.contract(address=peer_network_address, abi=peer_network_
 def generate_random_name():
     """Generate a random student name"""
     first_names = ["Emma", "Liam", "Olivia", "Noah", "Ava", "Ethan", "Sophia", "Mason", 
-                   "Isabella", "William", "Mia", "James", "Evelyn", "Alexander", "Harper"]
+                   "Isabella", "William", "Mia", "James", "Evelyn", "Alexander", "Harper", "Benjamin","Charlotte"]
     last_names = ["Smith", "Johnson", "Brown", "Davis", "Miller", "Wilson", "Moore", 
-                  "Taylor", "Anderson", "Thomas", "Jackson", "White", "Harris", "Martin"]
+                  "Taylor", "Anderson", "Thomas", "Jackson", "White", "Harris", "Martin", "Thompson", "Garcia"]
     return f"{random.choice(first_names)} {random.choice(last_names)}"
 
 def is_student_registered(account):
@@ -138,16 +138,27 @@ def add_company(company_name, account):
         print(f"Error adding company: {e}")
         return False
 
-def link_cv_to_company(company_name, ipfs_hash, account):
-    """Link a CV to a specific company"""
+def view_companies():
+    """View all companies in the peer network"""
     try:
-        tx_hash = peer_network.functions.linkCVToCompany(company_name, ipfs_hash).transact({"from": account})
-        receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
-        print(f"Successfully linked CV to company {company_name}")
-        return True
+        companies = peer_network.functions.getCompanies().call()
+        for company in companies:
+            print(f"Company: {company}")
     except Exception as e:
-        print(f"Error linking CV to company: {e}")
-        return False
+        print(f"Error viewing companies: {e}")
+
+def view_interviews():
+    """View all interview questions shared"""
+    try:
+        interviews = interview_share.functions.getAllInterviews().call()
+        for interview in interviews:
+            print(f"Company: {interview[0]}")
+            print(f"Position: {interview[2]}")
+            print(f"Questions: {interview[1]}")
+            print(f"Timestamp: {interview[3]}")
+            print(f"Shared By: {interview[4]}")
+    except Exception as e:
+        print(f"Error viewing interviews: {e}")
 
 def main():
     # Generate and register new random students
@@ -192,10 +203,17 @@ def main():
         if share_interview("Tech Corp", ["What is X?", "How would you Y?"], "Software Engineer", mentor_account):
             print("Interview sharing completed")
         
-        # Add company and link CV
+        # Add company
         if add_company("Tech Corp", mentor_account):
-            if link_cv_to_company("Tech Corp", "QmTestHash", mentor_account):
-                print("Company addition and CV linking completed")
+            print("Company addition completed")
+
+    # View all companies
+    print("\nViewing all companies:")
+    view_companies()
+
+    # View all interview questions
+    print("\nViewing all interview questions:")
+    view_interviews()
 
 if __name__ == "__main__":
     main()

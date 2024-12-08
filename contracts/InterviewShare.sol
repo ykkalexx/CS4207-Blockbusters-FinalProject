@@ -15,6 +15,7 @@ contract InterviewShare {
     }
     
     mapping(string => Interview[]) public companyInterviews;
+    string[] public companyList;
     
     event InterviewShared(address indexed sharer, string companyName);
     
@@ -44,6 +45,37 @@ contract InterviewShare {
         });
         
         companyInterviews[_companyName].push(interview);
+        
+        // Add company to list if not already present
+        bool companyExists = false;
+        for (uint256 i = 0; i < companyList.length; i++) {
+            if (keccak256(bytes(companyList[i])) == keccak256(bytes(_companyName))) {
+                companyExists = true;
+                break;
+            }
+        }
+        if (!companyExists) {
+            companyList.push(_companyName);
+        }
+        
         emit InterviewShared(msg.sender, _companyName);
+    }
+
+    // Function to fetch every interview question for all companies
+    function getAllInterviews() public view returns (Interview[] memory) {
+        uint256 totalInterviews = 0;
+        for (uint256 i = 0; i < companyList.length; i++) {
+            totalInterviews += companyInterviews[companyList[i]].length;
+        }
+
+        Interview[] memory interviews = new Interview[](totalInterviews);
+        uint256 index = 0;
+        for (uint256 i = 0; i < companyList.length; i++) {
+            for (uint256 j = 0; j < companyInterviews[companyList[i]].length; j++) {
+                interviews[index] = companyInterviews[companyList[i]][j];
+                index++;
+            }
+        }
+        return interviews;
     }
 }
